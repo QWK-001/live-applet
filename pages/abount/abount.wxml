@@ -2,6 +2,6 @@
   <view class="version">
   <view class="title">环信直播</view>
     <image src="/images/banben.jpg" class="pictrue" mode="aspectFill"></image>
-    <view class="text">版本号：H1.0.0</view>
+    <view class="text">版本号：1.0.0</view>
   </view>
 </view>

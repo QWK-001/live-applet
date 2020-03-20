@@ -1,6 +1,6 @@
 Page({
   data: {
-    activeName:"MIS季中赛",
+    activeName:"正在直播中",
     list: [
       {
         url: '/images/1.png',

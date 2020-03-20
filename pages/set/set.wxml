@@ -12,7 +12,7 @@
     <image class="icon" src="/images/more.png" class="more"></image>
   </view>
    <view class="list" bindtap='about'>
-    <text>关于我们</text>
+    <text>关于环信</text>
     <image class="icon" src="/images/more.png" class="more"></image>
   </view>
 </view>

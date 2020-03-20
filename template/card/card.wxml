@@ -1,32 +1,37 @@
+<!-- 正在直播 -->
 <template name="card">
   <view class="card">
     <view class="card-item" wx:for="{{data}}" wx:for-item="cardData" wx:key="{{cardData.userId}}" bindtap='golive'>
       <image src="{{cardData.url}}" mode="widthFix" class="pictrue"></image>
-      <view class="title">{{cardData.title}}</view>
+      <!-- 正在直播图标 -->
+      <view class="active">
+        <image class="active-icon" src="../../images/live-icon.png" />
+        <text style="color:whit">正在直播</text>
+      </view>
+      <!-- <view class="title">{{cardData.title}}</view> -->
       <view class="userinfo">
         <text class="username">{{cardData.username}}</text>
         <view class="count">
-          <text class="fa fa-eye"></text>
-          <text style="margin-left:4rpx;">{{cardData.count}}</text>
+          <text style="margin-left:4rpx;">{{cardData.count}}正在看</text>
         </view>
       </view>
     </view>
   </view>
 </template>
 
-<!-- 活动详情 -->
+<!-- 立即开播 -->
 <template name="activeCard">
   <view class="card">
     <view class="card-item" wx:for="{{data}}" wx:for-item="cardData" wx:key="{{cardData.userId}}" bindtap='golive'>
       <image src="{{cardData.url}}" mode="widthFix" class="pictrue"></image>
-      <!-- 活动图标 -->
+      <!-- 正在直播图标 -->
       <view class="active">{{activeName}}</view>
       <view class="title">{{cardData.title}}</view>
       <view class="userinfo">
         <text class="username">{{cardData.username}}</text>
         <view class="count">
-          <text class="fa fa-eye"></text>
-          <text style="margin-left:4rpx;">{{cardData.count}}</text>
+          
+          <text style="margin-left:4rpx;">{{cardData.count}}正在看</text>
         </view>
       </view>
     </view>
