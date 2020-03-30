@@ -2,12 +2,10 @@ var sliderWidth = 96; // 需要设置slider的宽度，用于计算中间位置
 
 Page({
   data: {
-    tabs: ["聊天", "主播"],
-    activeIndex: 0,
-    sliderOffset: 0,
-    sliderLeft: 0,
+    buttons: [{ text: '关闭' }],
     height: 0,
-    pop: false,
+    hostShow: false, //主播详情弹窗
+    isAttention: false, // 关注主播
     danmuList: [
       {
         text: '这是我的弹幕',
@@ -21,7 +19,7 @@ Page({
       }],
     commentList: [{
       name: '一直玫瑰花',
-      info: '这是腾讯的直播吧'
+      info: '这是环信的直播吧'
     },
     {
       name: '一路信服',
@@ -31,67 +29,84 @@ Page({
       name: '我是一直廊',
       info: '我也是刚听说就来看看'
     },
-    ]
-  },
-  onShareAppMessage: function (res) {
-    return {
-      title: '环信直播',
-      path: '/pages/live/live',
-      success: function (res) {
-        // 转发成功
-        this.setData({
-          pop: false
-        })
-      },
-      fail: function (res) {
-        // 转发失败
-      }
-    }
+    {
+      name: '一路信服',
+      info: '是的吧'
+    },
+    {
+      name: '一路信服',
+      info: '是的吧'
+    },
+    ],
+    src: '/images/bgImg.jpg',
+    showInput: false,
+    isDanmu: false
   },
   onLoad: function () {
-    var that = this;
-    //分享
-    wx.showShareMenu({
-      withShareTicket: true
-    })
+    var self = this;
     wx.getSystemInfo({
       success: function (res) {
-        that.setData({
-          sliderLeft: (res.windowWidth / that.data.tabs.length - sliderWidth) / 2,
-          sliderOffset: res.windowWidth / that.data.tabs.length * that.data.activeIndex,
-          commentHeight: res.windowHeight - 400,
+        self.setData({
+          commentHeight: res.windowHeight - 550,
           height: res.windowHeight
         });
       }
     });
   },
-  tabClick: function (e) {
+  //点击出现输入框
+  showInput: function () {
     this.setData({
-      sliderOffset: e.currentTarget.offsetLeft,
-      activeIndex: e.currentTarget.id
+      showInput: true
+    })
+  },
+  //隐藏输入框
+  onHideInput: function () {
+    this.setData({
+      showInput: false
+    })
+  },
+
+  // 显示主播详情页面
+  showHostDetail() {
+    this.setData({
+      hostShow: true
+    })
+  },
+  // 点击关注
+  clickAttention() {
+    this.setData({
+      isAttention: !this.data.isAttention
+    })
+  },
+  // 弹幕开关
+  switchChange() {
+    this.setData({
+      isDanmu: !this.data.isDanmu
     });
   },
-  pop() {
+  tapDialogButton(e) {
     this.setData({
-      pop: true
+      hostShow: false,
     })
   },
-  close() {
-    this.setData({
-      pop: false
-    })
-  },
-  //举报
-  report() {
-    wx.navigateTo({
-      url: '/pages/report/report',
-    })
-    this.setData({
-      pop: false
-    })
+  // 键盘输入时触发
+  bindInputMsg(e) {
+    console.log('e>>>', e);
   },
   //发送弹幕
-  send() {
-    
+  sendTextMsg() {
+    this.onHideInput()
+  },
+  // 退出直播间
+  exitLiveRoom() {
+    console.log('退出');
+  },
+  // 点赞
+  giveLike() {
+
+  },
+  // 显示礼物弹窗
+  giftModa(){
+
   }
 });

@@ -24,7 +24,7 @@
   border-radius: 8rpx;
   font-size    : 24rpx;
   color        : #ffffff;
-  width        : 60px;
+  width        : 70px;
   height       : 15px;
   background   : linear-gradient(325deg, rgba(90, 93, 208, 1) 0%, rgba(4, 174, 240, 1) 100%);
 }
