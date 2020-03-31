@@ -1,110 +1,10 @@
 const app = getApp();
 Page({
+  cursor: '',
   data: {
     width: 0,
     height: 0,
-    imgUrls: [
-      {
-        id: '1',
-        url: '/images/1.png',
-        title: '神秘直播间'
-      },
-      {
-        id: '2',
-        url: '/images/2.png',
-        title: '国服第一露娜'
-      },
-      {
-        id: '3',
-        url: '/images/3.png',
-        title: '神仙姐姐'
-      },
-      {
-        id: '4',
-        url: '/images/4.png',
-        title: '吃鸡吃鸡~'
-      },
-      {
-        id: '5',
-        url: '/images/5.png',
-        title: '女装大佬了解下'
-      },
-      {
-        id: '6',
-        url: '/images/6.png',
-        title: '国服大师局'
-      }
-    ],
-    list: [
-      {
-        label: '热门直播',
-        labelId: '10001',
-        data: [
-          {
-            url: '/images/1.png',
-            title: '魔王张三胖',
-            username: '琪琪',
-            userId: '001',
-            count: '4362'
-          },
-          {
-            url: '/images/2.png',
-            title: '国服第一露娜',
-            username: '露娜',
-            userId: '002',
-            count: '1.2w'
-          },
-          {
-            url: '/images/3.png',
-            title: '神仙姐姐',
-            username: '神仙姐姐',
-            userId: '003',
-            count: '4362'
-          },
-          {
-            url: '/images/4.png',
-            title: '指尖艺术',
-            username: '张三丰',
-            userId: '004',
-            count: '20w'
-          }
-        ]
-      },
-      {
-        label: '推荐直播',
-        labelId: '10001',
-        data: [
-          {
-            url: '/images/5.png',
-            title: '魔王张三胖',
-            username: '琪琪',
-            userId: '001',
-            count: '4362'
-          },
-          {
-            url: '/images/6.png',
-            title: '国服第一露娜',
-            username: '露娜',
-            userId: '002',
-            count: '1.2w'
-          },
-          {
-            url: '/images/3.png',
-            title: '神仙姐姐',
-            username: '神仙姐姐',
-            userId: '003',
-            count: '4362'
-          },
-          {
-            url: '/images/4.png',
-            title: '指尖艺术',
-            username: '张三丰',
-            userId: '004',
-            count: '20w'
-          }
-        ]
-      }
-    ]
+    liveroomsList: []
   },
   onLoad() {
     let self = this;
@@ -122,7 +22,104 @@ Page({
       },
     })
 
-    
+    this.getLiveRooms(5, '', callback)
+
+    function callback(res){
+      console.log('listroom: ', res)
+      let list = res.data.entities
+      self.cursor = res.data.cursor
+      self.setData({
+        liveroomsList: [{
+          label: '热门直播',
+          labelId: '10001',
+          data: list
+        }]
+      })
+    }
+
+    //创建直播间
+    // wx.request({
+    //   url: 'https://a1.easemob.com/appserver/liverooms',
+    //   method: 'POST',
+    //   data: {
+    //     name: '神仙姐姐',
+    //     description: '快来嗨',
+    //     maxusers: 5000,
+    //     owner: 'zdtest',
+    //     members: ['zdtest2'],
+    //     cover: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1585649298994&di=4a23a41095ba858b3275b9a9312eea81&imgtype=0&src=http%3A%2F%2Fa4.att.hudong.com%2F21%2F09%2F01200000026352136359091694357.jpg',
+    //     ext: {test: true}
+    //   },
+    //   header: {
+    //     'content-type': 'application/json',
+    //     Authorization: 'Bearer YWMtQDafZHMhEeqyFiOa7jOZEE1-S6DcShHjkNXh_7qs2vUy04pwHuER6YGUI5WOSRNCAwMAAAFxL34SkQBPGgCgcHDOxwPUcTnUwWhld-t9BIWlLRZ3xZiJwKGCPYtqew'
+    //   },
+    //   success (res) {
+    //     console.log('创建的直播间: ', res)
+    //   }
+    // })
+
+    //设置直播状态
+    // let liveroomId = "111402651025409";
+    // let username = "zdtest"
+    // wx.request({
+    //   url: `https://a1.easemob.com/appserver/liverooms/${liveroomId}/users/${username}/ongoing`,
+    //   method: 'POST',
+    //   header: {
+    //     'content-type': 'application/json',
+    //     Authorization: 'Bearer YWMtQDafZHMhEeqyFiOa7jOZEE1-S6DcShHjkNXh_7qs2vUy04pwHuER6YGUI5WOSRNCAwMAAAFxL34SkQBPGgCgcHDOxwPUcTnUwWhld-t9BIWlLRZ3xZiJwKGCPYtqew'
+    //   },
+    //   success (res) {
+    //     console.log('开始直播: ', res)
+    //   }
+    // })
+
+  },
+  onPullDownRefresh(){
+    console.log('出发下啦')
+    let self = this;
+    this.getLiveRooms(5, self.cursor, callback)
+    function callback(res){
+      if(!res.data.entities){
+        wx.showToast({
+           title:'已无更多数据',
+           icon:'none',
+           duration:2000
+        })
+        return
+      }
+      let list = res.data.entities
+      let currentList = list.concat(self.data.liveroomsList[0].data)
+      self.cursor = res.data.cursor
+      self.setData({
+        liveroomsList: [{
+          label: '热门直播',
+          labelId: '10001',
+          data: currentList
+        }]
+      })
+      console.log('list..', list)
+      wx.stopPullDownRefresh()
+    }
+  },
+  getLiveRooms(limit, cursor, callback){
+    wx.request({
+      url: 'https://a1.easemob.com/appserver/liverooms',
+      data: {
+        limit: limit,
+        cursor: cursor
+      },
+      header: {
+        'content-type': 'application/json',
+        Authorization: 'Bearer YWMtQDafZHMhEeqyFiOa7jOZEE1-S6DcShHjkNXh_7qs2vUy04pwHuER6YGUI5WOSRNCAwMAAAFxL34SkQBPGgCgcHDOxwPUcTnUwWhld-t9BIWlLRZ3xZiJwKGCPYtqew'
+      },
+      success (res) {
+        callback(res)
+      },
+      fail(e){
+        callback(e)
+      }
+    })
   },
   detail() {
     wx.navigateTo({

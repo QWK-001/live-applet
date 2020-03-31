@@ -1,8 +1,8 @@
 <!-- 正在直播 -->
 <template name="card">
   <view class="card">
-    <view class="card-item" wx:for="{{data}}" wx:for-item="cardData" wx:key="{{cardData.userId}}" bindtap='golive'>
-      <image src="{{cardData.url}}" mode="widthFix" class="pictrue"></image>
+    <view class="card-item" wx:for="{{data}}" wx:for-item="cardData" wx:key="{{cardData.id}}" bindtap='golive'>
+      <image src="{{cardData.cover}}" mode="widthFix" class="pictrue"></image>
       <!-- 正在直播图标 -->
       <view class="active">
         <image class="active-icon" src="../../images/live-icon.png" />
@@ -10,9 +10,9 @@
       </view>
       <!-- <view class="title">{{cardData.title}}</view> -->
       <view class="userinfo">
-        <text class="username">{{cardData.username}}</text>
+        <text class="username">{{cardData.owner}}</text>
         <view class="count">
-          <text style="margin-left:4rpx;">{{cardData.count}}正在看</text>
+          <text style="margin-left:4rpx;">{{cardData.showid}}正在看</text>
         </view>
       </view>
     </view>
