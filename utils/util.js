@@ -14,6 +14,16 @@ const formatNumber = n => {
   return n[1] ? n : '0' + n
 }
 
+const getIMUserId = function(){
+    const chars = '0123456789abcdefghijklmnopqrstuvwxyz'.split('');
+    let uuid = [];
+    for (var i = 0; i < 8; i++) {
+        uuid[i] = chars[parseInt(Math.random()*chars.length)]
+    }
+    return 'lr'+'-'+uuid.join('')
+}
+
 module.exports = {
-  formatTime: formatTime
+  formatTime: formatTime,
+  getIMUserId
 }
