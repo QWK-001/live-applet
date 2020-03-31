@@ -110,6 +110,7 @@ Page({
     let self = this;
     wx.getSystemInfo({
       success: function (res) {
+        console.log('res:', res)
         let w = res.windowWidth;
         let h = res.windowHeight;
         app.globalData.width = w;
@@ -120,6 +121,8 @@ Page({
         })
       },
     })
+
+    
   },
   detail() {
     wx.navigateTo({
