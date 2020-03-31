@@ -73,3 +73,28 @@
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 1;
 }
+.open-live{
+  position: absolute;
+  top: 40%;
+  left: 20%;
+  width: 222rpx;
+  height: 66rpx;
+  align-items: center;
+}
+.off-live{
+  position: absolute;
+  top: 40%;
+  left: 35%;
+  width: 124rpx;
+  height: 78rpx;
+  align-items: center;
+  z-index: 10;
+}
+.off-bg{
+  background-color: rgba(0, 0, 0,.7);
+  z-index: 9;
+  height: 320rpx;
+  width: 100%;
+  position: absolute;
+  top: 0;
+}

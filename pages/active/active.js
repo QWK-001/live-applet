@@ -1,32 +1,101 @@
+const app = getApp();
 Page({
-  data:{
-    list:[
+  data: {
+    width: 0,
+    height: 0,
+    imgUrls: [
       {
-        id:'1',
-        activityPicture:'/images/a1.png',
-        title:'梦想棋牌',
-        host:'入围前十强',
-        sponsor:'环信直播'
+        id: '1',
+        url: '/images/1.png',
+        title: '神秘直播间',
       },
       {
         id: '2',
-        activityPicture: '/images/a2.png',
-        title: '吃鸡大赛',
-        host: "'鸡王'争霸",
-        sponsor: 'MIS联赛'
+        url: '/images/2.png',
+        title: '国服第一露娜',
       },
       {
         id: '3',
-        activityPicture: '/images/a3.png',
-        title: '英雄联盟季中冠军赛',
-        host: 'MIS赛',
-        sponsor: '拳头'
+        url: '/images/3.png',
+        title: '神仙姐姐'
+      },
+      {
+        id: '4',
+        url: '/images/4.png',
+        title: '吃鸡吃鸡~'
+      },
+      {
+        id: '5',
+        url: '/images/5.png',
+        title: '女装大佬了解下'
+      },
+      {
+        id: '6',
+        url: '/images/6.png',
+        title: '国服大师局'
       }
-    ]
+    ],
+    list: [
+      {
+        label: '热门直播',
+        labelId: '10001',
+        data: [
+          {
+            url: '/images/1.png',
+            title: '魔王张三胖',
+            username: '琪琪',
+            userId: '001',
+            count: '4362',
+            status: 'offline',
+          },
+          {
+            url: '/images/2.png',
+            title: '国服第一露娜',
+            username: '露娜',
+            userId: '002',
+            count: '1.2w',
+            status: 'offline',
+          },
+          {
+            url: '/images/3.png',
+            title: '神仙姐姐',
+            username: '神仙姐姐',
+            userId: '003',
+            count: '4362',
+            status: '',
+          },
+          {
+            url: '/images/4.png',
+            title: '指尖艺术',
+            username: '张三丰',
+            userId: '004',
+            count: '20w',
+            status: '',
+          }
+        ]
+      },
+    ],
+  },
+  onLoad() {
+    let self = this;
+    wx.getSystemInfo({
+      success: function (res) {
+        console.log('res:', res)
+      },
+    })
+
+
   },
   detail() {
     wx.navigateTo({
-      url: `/pages/activeDetail/activeDetail`,
+      url: `/pages/detail/detail`,
+    })
+  },
+  createdLive() {
+    console.log('创建》》》');
+    
+    wx.navigateTo({
+      // url: `/pages/live/live`,
     })
   }
 })

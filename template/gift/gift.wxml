@@ -1,4 +1,4 @@
-<template name="card">
+<!-- <template name="card">
   <view class="card">
     <view class="card-item" wx:for="{{data}}" wx:for-item="cardData" wx:key="{{cardData.userId}}" bindtap='golive'>
       <image src="{{cardData.url}}" mode="widthFix" class="pictrue"></image>
@@ -14,10 +14,11 @@
       </view>
     </view>
   </view>
-</template>
+</template> -->
 
 <template name="giftModa">
     <view class="giftModa">
+        <image src="/images/gift@2x.png" style="width=12px;height=12px"/>
         <view class="giftModa-item" >礼物</view>
     </view>
 </template>
