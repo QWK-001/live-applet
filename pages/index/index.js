@@ -10,7 +10,6 @@ Page({
     let self = this;
     wx.getSystemInfo({
       success: function (res) {
-        console.log('res:', res)
         let w = res.windowWidth;
         let h = res.windowHeight;
         app.globalData.width = w;
@@ -25,7 +24,6 @@ Page({
     this.getLiveRooms(5, '', callback)
 
     function callback(res){
-      console.log('listroom: ', res)
       let list = res.data.entities
       self.cursor = res.data.cursor
       self.setData({
@@ -73,12 +71,16 @@ Page({
     //     console.log('开始直播: ', res)
     //   }
     // })
+  },
+  autoLogin(){
+
+  },
+  register(){
 
   },
   onPullDownRefresh(){
-    console.log('出发下啦')
     let self = this;
-    this.getLiveRooms(5, self.cursor, callback)
+    self.getLiveRooms(5, self.cursor, callback)
     function callback(res){
       if(!res.data.entities){
         wx.showToast({
@@ -86,6 +88,7 @@ Page({
            icon:'none',
            duration:2000
         })
+        wx.stopPullDownRefresh()
         return
       }
       let list = res.data.entities

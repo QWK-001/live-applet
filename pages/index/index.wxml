@@ -3,7 +3,7 @@
   <view 
   	class="section"
   	wx:for="{{liveroomsList}}"
-  	wx:key="{{item.id}}"
+  	wx:key="id"
   >
     <template is="card" data="{{data: item.data}}"></template>
   </view>

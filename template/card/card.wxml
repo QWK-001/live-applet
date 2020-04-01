@@ -1,7 +1,7 @@
 <!-- 正在直播 -->
 <template name="card">
   <view class="card">
-    <view class="card-item" wx:for="{{data}}" wx:for-item="cardData" wx:key="{{cardData.id}}" bindtap='golive'>
+    <view class="card-item" wx:for="{{data}}" wx:for-item="cardData" wx:key="id" bindtap='golive'>
       <image src="{{cardData.cover}}" mode="widthFix" class="pictrue"></image>
       <!-- 正在直播图标 -->
       <view class="active">
