@@ -1714,12 +1714,12 @@ connection.prototype.getChatRooms = function (options) {
  */
 connection.prototype.joinChatRoom = function (options) {
     var options = options || {};
-    if (!_utils.isCanSetRequestHeader) {
-        conn.onError({
-            type: _code.WEBIM_CONNCTION_NOT_SUPPORT_CHATROOM_ERROR
-        });
-        return;
-    }
+    // if (!_utils.isCanSetRequestHeader) {
+    //     conn.onError({
+    //         type: _code.WEBIM_CONNCTION_NOT_SUPPORT_CHATROOM_ERROR
+    //     });
+    //     return;
+    // }
 
     var conn = this
     var token = options.accessToken || this.token;
