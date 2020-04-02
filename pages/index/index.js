@@ -37,10 +37,10 @@ Page({
 
     //创建直播间
     // wx.request({
-    //   url: 'https://a1.easemob.com/appserver/liverooms',
+    //   url: 'https://a1-hsb.easemob.com/appserver/liverooms',
     //   method: 'POST',
     //   data: {
-    //     name: '神仙姐姐',
+    //     name: '沙箱环境聊天室',
     //     description: '快来嗨',
     //     maxusers: 5000,
     //     owner: 'zdtest',
@@ -50,7 +50,7 @@ Page({
     //   },
     //   header: {
     //     'content-type': 'application/json',
-    //     Authorization: 'Bearer YWMtQDafZHMhEeqyFiOa7jOZEE1-S6DcShHjkNXh_7qs2vUy04pwHuER6YGUI5WOSRNCAwMAAAFxL34SkQBPGgCgcHDOxwPUcTnUwWhld-t9BIWlLRZ3xZiJwKGCPYtqew'
+    //     Authorization: 'Bearer YWMtAXs7anQAEeqWBpHuq-M6OegrzF8zZk2Wp8GS3pF-orBygEswZ3AR6oeZcaPHhOyhAwMAAAFxNTHrXQBPGgArP-xWEpAbJQqBqj54vLgVFeBCB6sd_lmQGS5o5vHOmA'
     //   },
     //   success (res) {
     //     console.log('创建的直播间: ', res)
@@ -71,12 +71,6 @@ Page({
     //     console.log('开始直播: ', res)
     //   }
     // })
-  },
-  autoLogin(){
-
-  },
-  register(){
-
   },
   onPullDownRefresh(){
     let self = this;
@@ -107,14 +101,14 @@ Page({
   },
   getLiveRooms(limit, cursor, callback){
     wx.request({
-      url: 'https://a1.easemob.com/appserver/liverooms',
+      url: 'https://a1-hsb.easemob.com/appserver/liverooms',
       data: {
         limit: limit,
         cursor: cursor
       },
       header: {
         'content-type': 'application/json',
-        Authorization: 'Bearer YWMtQDafZHMhEeqyFiOa7jOZEE1-S6DcShHjkNXh_7qs2vUy04pwHuER6YGUI5WOSRNCAwMAAAFxL34SkQBPGgCgcHDOxwPUcTnUwWhld-t9BIWlLRZ3xZiJwKGCPYtqew'
+        Authorization: 'Bearer YWMtAXs7anQAEeqWBpHuq-M6OegrzF8zZk2Wp8GS3pF-orBygEswZ3AR6oeZcaPHhOyhAwMAAAFxNTHrXQBPGgArP-xWEpAbJQqBqj54vLgVFeBCB6sd_lmQGS5o5vHOmA'
       },
       success (res) {
         callback(res)
@@ -129,9 +123,36 @@ Page({
       url: `/pages/detail/detail`,
     })
   },
-  golive() {
-    wx.navigateTo({
-      url: `/pages/live/live`,
+  golive(e) {
+    console.log('liveroom', e)
+    let liveroom = e.currentTarget.dataset.liveroom
+    // {
+    //   affiliations_count: 3
+    //   cover: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1585649298994&di=4a23a41095ba858b3275b9a9312eea81&imgtype=0&src=http%3A%2F%2Fa4.att.hudong.com%2F21%2F09%2F01200000026352136359091694357.jpg"
+    //   created: 1585639782505
+    //   description: "快来嗨"
+    //   ext: {test: true}
+    //   id: "111402163437571"
+    //   name: "神仙姐姐"
+    //   owner: "fca64a28a115453cb902b11ace29baf5"
+    //   showid: 3
+    //   status: "offline"
+    // }
+
+    //进入直播间
+    wx.WebIM.conn.joinChatRoom({
+      roomId: liveroom.id,
+      success: successFun,
+      error: errorFun
     })
+
+    function successFun(res){
+      wx.navigateTo({
+        url: `/pages/live/live?id=${liveroom.id}&name=${liveroom.name}&owner=${liveroom.owner}`,
+      })
+    }
+    function errorFun(e){
+      console.log('加入失败', e)
+    }
   }
 })

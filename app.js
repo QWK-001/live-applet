@@ -233,7 +233,7 @@ App({
         return this.register(userName, password)
       }
       let userInfo = JSON.parse(userName)
-      // this.autoLogin(userInfo.userName, password)
+      this.autoLogin(userInfo.userName, password)
     }
 
     // 展示本地存储能力

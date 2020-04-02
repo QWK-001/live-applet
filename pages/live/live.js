@@ -36,14 +36,29 @@ Page({
     {
       name: '一路信服',
       info: '是的吧'
-    },
+    }
     ],
     src: '/images/bgImg.jpg',
     showInput: false,
-    isDanmu: false
+    isDanmu: false,
+
+    roomId: '',
+    nickName: '',
+    myUserName: '',
+    textMsg: ''
   },
-  onLoad: function () {
+  onLoad: function (option) {
+    console.log('coption.query', option.query)
     var self = this;
+
+    let userName = wx.getStorageSync('userName')
+    let userInfo = JSON.parse(userName)
+
+    self.setData({
+      roomId: option.id,
+      nickName: option.name,
+      myUserName: userInfo.userName
+    })
     wx.getSystemInfo({
       success: function (res) {
         self.setData({
@@ -91,11 +106,54 @@ Page({
   },
   // 键盘输入时触发
   bindInputMsg(e) {
-    console.log('e>>>', e);
+    console.log('txt:', e.detail.value);
+    this.setData({
+      textMsg: e.detail.value
+    })
   },
   //发送弹幕
   sendTextMsg() {
     this.onHideInput()
+    let tsxtMsg = this.data.textMsg
+    let roomId = this.data.roomId
+    let from = this.data.myUserName
+    let id = wx.WebIM.conn.getUniqueId();                 // 生成本地消息id
+    let msg = new wx.WebIM.message('txt', id);      // 创建文本消息
+    msg.set({
+        msg: tsxtMsg,                            // 消息内容
+        to: roomId, 
+        from,
+        roomType: true,
+        ext: {},                                 //扩展消息
+        success: function (id, serverMsgId) {
+            console.log('send private text Success');  
+        },
+        fail: function(e){
+            console.log("Send private text error");  
+        }
+    });
+    msg.setGroup('groupchat');
+
+    console.log('msg', msg)
+    wx.WebIM.conn.send(msg.body);
+
+    //测试发自定义消息
+    // const pMessage = parseFromLocal(chatType, chatId, message, 'custom')
+    // msgObj.set({
+    //     to,
+    //     roomType: chatroom,
+    //     chatType: 'singleChat',
+    //     customEvent: 'customEvent',
+    //     customExts: {qw: 123},
+    //     params: {a: 33},
+    //     success: function () {
+    //         dispatch(Creators.updateMessageStatus(pMessage, 'sent'))
+    //     },
+    //     fail: function () {
+    //         dispatch(Creators.updateMessageStatus(pMessage, 'fail'))
+    //     },
+    //     ext: {a: 1}
+    // })
   },
   // 退出直播间
   exitLiveRoom() {
