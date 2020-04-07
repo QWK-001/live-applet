@@ -5,7 +5,76 @@ Page({
     buttons: [{ text: '关闭' }],
     height: 0,
     hostShow: false, //主播详情弹窗
+    showGiftModa: true, // 礼物弹窗
     isAttention: false, // 关注主播
+    giftModaData: {  // 礼物模块数据（主播、粉丝）
+      status: 'fans',//直播间身份（粉丝）
+
+      giftData: [
+        {
+          key: '1',
+          value: 'gift_1',
+          name: '香水玫瑰',
+          url: '/images/Gift_01@2x.png'
+        },
+        {
+          key: '2',
+          value: '2',
+          name: '心想事成',
+          url: '/images/Gift_02@2x.png'
+        },
+        {
+          key: '3',
+          value: 'gift_3',
+          name: '比翼双飞',
+          url: '/images/Gift_03@2x.png'
+        },
+        {
+          key: '4',
+          value: 'gift_4',
+          name: '生日蛋糕',
+          url: '/images/Gift_04@2x.png'
+        },
+        {
+          key: '5',
+          value: 'gift_5',
+          name: '大礼包',
+          url: '/images/Gift_05@2x.png'
+        },
+        {
+          key: '6',
+          value: 'gift_6',
+          name: '春花浪漫',
+          url: '/images/Gift_06@2x.png'
+        },
+        {
+          key: '7',
+          value: 'gift_7',
+          name: '小狗狗',
+          url: '/images/Gift_07@2x.png'
+        },
+        {
+          key: '8',
+          value: 'gift_8',
+          name: '金镯子',
+          url: '/images/Gift_08@2x.png'
+        }
+      ],
+
+      showGiftId: 0,
+      options: [{
+        city_id: '001',
+        city_name: '北京'
+      }, {
+        city_id: '002',
+        city_name: '上海'
+      }, {
+        city_id: '003',
+        city_name: '深圳'
+      }]
+
+    },
+
     danmuList: [
       {
         text: '这是我的弹幕',
@@ -164,7 +233,23 @@ Page({
 
   },
   // 显示礼物弹窗
-  giftModa(){
-
+  giftModa() {
+    this.setData({
+      showGiftModa: true
+    })
+  },
+  // 关闭礼物弹窗
+  closeMask() {
+    this.setData({
+      showGiftModa: false
+    })
+  },
+  // 当前选中的礼物
+  inselected(e) {
+    let id = e.currentTarget.dataset.giftid
+    let showGiftId = 'giftModaData.showGiftId'
+    this.setData({
+      [showGiftId]: id
+    })
   }
 });

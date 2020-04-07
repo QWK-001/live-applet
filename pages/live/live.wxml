@@ -102,4 +102,4 @@
 </mp-dialog>
 
 <!-- 礼物模块 -->
-<!-- <template is="giftModa"></template> -->
+<template is="giftModa" data="{{...giftModaData}}" wx:if="{{showGiftModa}}"></template>

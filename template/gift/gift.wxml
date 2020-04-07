@@ -15,10 +15,33 @@
     </view>
   </view>
 </template> -->
-
 <template name="giftModa">
-    <view class="giftModa">
-        <image src="/images/gift@2x.png" style="width=12px;height=12px"/>
-        <view class="giftModa-item" >礼物</view>
+  <view class="giftModa">
+    <view class="mask" bindtap='closeMask'></view>
+    <!-- 观众送礼模块 -->
+    <view wx:if="{{status === 'fans'}}" style="width:100%;padding:20rpx;font-size:15px;color:rgba(255,255,255,.8)">
+      <image src="/images/gift@2x.png" style="width:13px;height:13px;margin-right:10px" />
+      <text class="giftModa-item">礼物</text>
+      <view style="margin-top:5%">
+        <view class="gift-item {{showGiftId === giftData.key && 'active'}}" wx:for="{{giftData}}" wx:for-item="giftData" data-giftid="{{giftData.key}}" wx:key="{{giftData.value}}" bindtap="inselected">
+          <image class="giftImg" src="{{giftData.url}}" />
+          <text>{{giftData.name}}</text>
+        </view>
+      </view>
+      <!-- <form bindsubmit="giftSubmit"> -->
+        <!-- <view class="section">
+          <input class='input_input' value="{{inputMessage}}" focus="auto" placeholder="请输入内容" bindinput='bindInputMsg' confirm-type="send" type="number" />
+        </view> -->
+
+        <!-- <view class="btn-area">
+          <button>Submit</button>
+        </view> -->
+      <!-- </form> -->
     </view>
+    <!-- 主播查看礼物模块 -->
+    <view wx:else>
+      <image src="/images/gift@2x.png" style="width:13px;height:13px;margin-right:10px" />
+      <text class="giftModa-item">礼物记录</text>
+    </view>
+  </view>
 </template>
