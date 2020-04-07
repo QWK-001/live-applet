@@ -5,7 +5,7 @@ Page({
     buttons: [{ text: '关闭' }],
     height: 0,
     hostShow: false, //主播详情弹窗
-    showGiftModa: true, // 礼物弹窗
+    showGiftModa: false, // 礼物弹窗
     isAttention: false, // 关注主播
     giftModaData: {  // 礼物模块数据（主播、粉丝）
       status: 'fans',//直播间身份（粉丝）
