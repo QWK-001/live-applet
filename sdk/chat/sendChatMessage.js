@@ -1,5 +1,5 @@
 import _utils from '../utils'
- function encodeKeyValueMsg(msg){
+function encodeKeyValueMsg(msg){
         if (!msg || typeof msg != "object") { return }
         var emptyMessage = [];
         var keyValueBody = this.context.root.lookup("easemob.pb.KeyValue");
@@ -101,7 +101,7 @@ var sendMessage = function(messageOption, conn){
             break;
         case 'custom':
             fifthMessage.type = 7;
-            //fifthMessage.params = encodeKeyValueMsg.call(conn, messageOption.customExts)
+            fifthMessage.params = encodeKeyValueMsg.call(conn, messageOption.customExts)
             fifthMessage.customEvent = messageOption.customEvent;
             fifthMessage.customExts = encodeKeyValueMsg.call(conn, messageOption.customExts)
             break;

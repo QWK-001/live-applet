@@ -23,6 +23,7 @@ var sock;
 var mr_cache = {};
 var max_cache_length = 100;
 var load_msg_cache = [];
+var queues = [];
 if(!window){
     window = wx
 }
@@ -33,7 +34,6 @@ var _listenNetwork = function (onlineCallback, offlineCallback) {
     if (window.addEventListener) {
         window.addEventListener('online', onlineCallback);
         window.addEventListener('offline', offlineCallback);
-
     } else if (window.attachEvent) {
         if (document.body) {
             document.body.attachEvent('ononline', onlineCallback);
@@ -62,6 +62,18 @@ var _listenNetwork = function (onlineCallback, offlineCallback) {
          });*/
     }
 };
+
+function checkArray(arr, queue){
+    var turnOff = 'off'
+    arr.forEach((item, index) => {
+        if (item.name === queue.name) {
+            turnOff = 'on'
+            return index
+        }
+    })
+    if (turnOff == 'off') {return false}
+    
+}
 
 var _parseNameFromJidFn = function (jid, domain) {     //*******删掉或者改动 */
     return jid.name;
@@ -163,12 +175,29 @@ var _login = function (options, conn) {
                 CommSyncDLMessage = CommSyncDLMessage.decode(result.payload);
                 var msgId = new Long(CommSyncDLMessage.serverId.low,CommSyncDLMessage.serverId.high, CommSyncDLMessage.serverId.unsigned).toString();
                 var metaId = new Long(CommSyncDLMessage.metaId.low,CommSyncDLMessage.metaId.high, CommSyncDLMessage.metaId.unsigned).toString();
+
+                // console.log('CommSyncDLMessage', CommSyncDLMessage)
+                // console.log('------------')
+
                 if (CommSyncDLMessage.metas.length !== 0) {
                     metapayload(CommSyncDLMessage.metas, CommSyncDLMessage.status, conn);
                     lastsession(CommSyncDLMessage.nextKey, CommSyncDLMessage.queue, conn);
                 }
                 else if(CommSyncDLMessage.isLast){
                     //当前为最后一条消息
+                    var queuesIndex = checkArray(queues, CommSyncDLMessage.queue);
+                    // console.log('queues 22', queues)
+                    // console.log(CommSyncDLMessage.queue)
+                    if(queuesIndex !== false){
+                        // islsat == true 删除队列当前的queue
+                        // console.log('走进删除一个queue', queues)
+                        queues.splice(queuesIndex, 1)
+                    }
+                    if (queues.length > 0) {
+                        // console.log('走进继续发sync', queues)
+                       backqueue(queues[0], conn) 
+                       this.qTimer && clearTimeout(this.qTimer)
+                    }
                 }
                 else if(CommSyncDLMessage.status && CommSyncDLMessage.status.errorCode === 0){
                     if (_msgHash[metaId]) {
@@ -211,12 +240,16 @@ var _login = function (options, conn) {
                         case "message recall disabled":
                             type = _code.SERVICE_NOT_ENABLED
                             break;
+                        case "not in group or chatroom white list":
+                            type = _code.SERVICE_NOT_ALLOW_MESSAGING
+                            break;
                         default:
                             type = _code.SERVER_UNKNOWN_ERROR
                             break;
-                    }  
+                    }
                     conn.onError({
                         type: type,
+                        reason: CommSyncDLMessage.status.reason?CommSyncDLMessage.status.reason:'',
                         data:{
                             id:metaId,
                             mid: msgId
@@ -254,9 +287,15 @@ var _login = function (options, conn) {
                 }
                 break;
             case 1:
+
                 var CommUnreadDLMessage = root.lookup("easemob.pb.CommUnreadDL");
                 CommUnreadDLMessage = CommUnreadDLMessage.decode(result.payload);
+
+                // console.log('CommUnreadDLMessage 11', CommUnreadDLMessage)
+
                 if (CommUnreadDLMessage.unread.length === 0) {
+                    //rebuild();
+                    //发sync 同步statistic
                 }
                 else {
                     for (var i = 0; i < CommUnreadDLMessage.unread.length; i++) {
@@ -268,7 +307,27 @@ var _login = function (options, conn) {
             case 2:
                 var Message = root.lookup("easemob.pb.CommNotice");
                 var noticeMessage = Message.decode(result.payload);
-                backqueue(noticeMessage.queue, conn);
+
+                // console.log('noticeMessage 22', noticeMessage)
+                    
+                if (checkArray(queues, noticeMessage.queue) === false){
+                    queues.push(noticeMessage.queue)
+                    this.qTimer && clearTimeout(this.qTimer)
+                    this.qTimer = setTimeout( function() {
+                        var q = noticeMessage.queue
+                        if(checkArray(queues, q) !== false){
+                            backqueue(q, conn)
+                        }
+                    }, 20000)
+                }else{
+                    return
+                }
+
+                if(queues.length == 1){
+                    // console.log('发送')
+                    backqueue(noticeMessage.queue, conn);
+                }
+                
                 break;
             case 3:
                 receiveProvision(result, conn);

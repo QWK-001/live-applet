@@ -15,6 +15,37 @@ var sendDelivery = function(conn, msg ,msgId){
         // self.send(deliverMessage.body);
     }
 }
+
+var decodeMsg = function(msgExt){
+    if(!msgExt){return}
+    let msg = msgExt
+    let msgObj = {}
+    for(var k = 0; k < msg.length; k++){
+        if(msg[k].type == 8){
+            msgObj[msg[k].key] = JSON.parse(msg[k].stringValue);
+        }
+        else if(msg[k].type == 7){
+            msgObj[msg[k].key] = msg[k].stringValue;
+        }
+        else if(msg[k].type == 6){
+            msgObj[msg[k].key] = msg[k].doubleValue;
+        }
+        else if(msg[k].type == 5){
+            msgObj[msg[k].key] = msg[k].floatValue;
+        }
+        else if(msg[k].type == 1 || msg[k].type == 2 || msg[k].type == 3 || msg[k].type == 4){
+            if(msg[k].type == 2){
+                var varintValue = msg[k].varintValue
+                var value = new Long(varintValue.low,varintValue.high, varintValue.unsigned).toString();
+                msgObj[msg[k].key] = Number(value); 
+            }else{
+                msgObj[msg[k].key] = msg[k].varintValue; 
+            }
+        }
+    }
+    return msgObj
+}
+
 var handleMessage = function(meta, status, conn){
     var self = conn;
     var time = new Long(meta.timestamp.low,meta.timestamp.high, meta.timestamp.unsigned).toString();
@@ -279,15 +310,26 @@ var handleMessage = function(meta, status, conn){
                 conn.onCmdMessage(msg);
                 break;
             case 7:
-                console.log(thirdMessage)
+                var customExts = '';
+                var params = ''
+                if(thirdMessage.contents[0].customExts){
+                    customExts = decodeMsg(thirdMessage.contents[0].customExts)
+                }
+
+                if(thirdMessage.contents[0].params){
+                    params = decodeMsg(thirdMessage.contents[0].params)
+                }
                 msg = {
                     id: msgId,
+                    contentsType: ContentsType[msgBody.type],
                     from: from,
                     to: to,
                     customEvent: msgBody.customEvent,
-                    customExts: msgBody.customExts
+                    params: params,
+                    customExts: customExts,
+                    ext: extmsg
                 }
-                !ignoreCallback && conn.onCustomMessage(thirdMessage);
+                conn.onCustomMessage(msg);
                 break;
             default:
                 break;
