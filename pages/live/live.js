@@ -9,7 +9,9 @@ Page({
     isAttention: false, // 关注主播
     giftModaData: {  // 礼物模块数据（主播、粉丝）
       status: 'fans',//直播间身份（粉丝）
-
+      showGivesModa: false,//显隐送礼模块
+      giftName: '',
+      giftNumValue:'1', // 礼物数量
       giftData: [
         {
           key: '1',
@@ -255,10 +257,17 @@ Page({
   },
   // 当前选中的礼物
   inselected(e) {
-    let id = e.currentTarget.dataset.giftid
+    let id = e.currentTarget.dataset.giftid.key
     let showGiftId = 'giftModaData.showGiftId'
+    let showGivesModa = 'giftModaData.showGivesModa'
+    let giftName = 'giftModaData.giftName'
     this.setData({
-      [showGiftId]: id
+      [showGiftId]: id,
+      [showGivesModa]: true,
+      [giftName]: e.currentTarget.dataset.giftid.name
     })
+  },
+  giftSubmit(e){
+    console.log('e>>>',e);
   }
 });

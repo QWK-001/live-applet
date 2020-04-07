@@ -36,3 +36,14 @@
 .active {
     box-shadow: rgb(11, 234, 235) 0px 0px 10px inset;
 }
+.btn-area,.section{
+    display: inline-block;
+}
+.section{
+    margin-right: 10px;
+}
+.gift-text{
+    position: relative;
+    bottom: 15px;
+    right: 10px;
+}
