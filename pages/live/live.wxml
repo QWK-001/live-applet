@@ -42,9 +42,9 @@
         </view>
         <!-- 聊天 -->
         <view style="height:{{commentHeight}}px" class="comment">
-          <view class="comment-list" wx:for="{{commentList}}">
-            <text class="name">{{item.name}}:</text>
-            <text style="color:#FFC700">{{item.info}}</text>
+          <view class="comment-list" wx:for="{{msgList}}">
+            <text class="name">{{item.from}}:</text>
+            <text style="color:#FFC700">{{item.msg}}</text>
           </view>
         </view>
         <!-- 发送弹幕 -->
@@ -72,7 +72,7 @@
     </view>
   </view>
 </view>
-<!-- 主播详情弹窗 -->
+<!-- 主播详情弹窗 --> 
 <mp-dialog show="{{hostShow}}" bindbuttontap="tapDialogButton" buttons="{{buttons}}">
   <view class="userInfo">
     <view class="left">
@@ -102,4 +102,4 @@
 </mp-dialog>
 
 <!-- 礼物模块 -->
-<template is="giftModa" data="{{...giftModaData}}" wx:if="{{showGiftModa}}"></template>
+<!-- <template is="giftModa"></template> -->

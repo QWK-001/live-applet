@@ -86,27 +86,29 @@ Page({
         color: '#ff00ff',
         time: 3
       }],
-    commentList: [{
-      name: '一直玫瑰花',
-      info: '这是环信的直播吧'
-    },
-    {
-      name: '一路信服',
-      info: '是的吧'
-    },
-    {
-      name: '我是一直廊',
-      info: '我也是刚听说就来看看'
-    },
-    {
-      name: '一路信服',
-      info: '是的吧'
-    },
-    {
-      name: '一路信服',
-      info: '是的吧'
-    }
+    commentList: [
+      {
+        name: '一直玫瑰花',
+        info: '这是环信的直播吧'
+      },
+      {
+        name: '一路信服',
+        info: '是的吧'
+      },
+      {
+        name: '我是一直廊',
+        info: '我也是刚听说就来看看'
+      },
+      {
+        name: '一路信服',
+        info: '是的吧'
+      },
+      {
+        name: '一路信服',
+        info: '是的吧'
+      }
     ],
+    msgList: [],
     src: '/images/bgImg.jpg',
     showInput: false,
     isDanmu: false,
@@ -114,6 +116,7 @@ Page({
     roomId: '',
     nickName: '',
     myUserName: '',
+    nickName: '',
     textMsg: ''
   },
   onLoad: function (option) {
@@ -126,7 +129,8 @@ Page({
     self.setData({
       roomId: option.id,
       nickName: option.name,
-      myUserName: userInfo.userName
+      myUserName: userInfo.userName,
+      nickName: userInfo.nickName
     })
     wx.getSystemInfo({
       success: function (res) {
@@ -182,6 +186,7 @@ Page({
   },
   //发送弹幕
   sendTextMsg() {
+    let self = this;
     this.onHideInput()
     let tsxtMsg = this.data.textMsg
     let roomId = this.data.roomId
@@ -193,7 +198,7 @@ Page({
         to: roomId, 
         from,
         roomType: true,
-        ext: {},                                 //扩展消息
+        ext: {nickName: this.data.nickName},                                 //扩展消息
         success: function (id, serverMsgId) {
             console.log('send private text Success');  
         },
@@ -205,7 +210,11 @@ Page({
 
     console.log('msg', msg)
     wx.WebIM.conn.send(msg.body);
-
+    let msgList = self.data.msgList
+    msgList.push(msg.body)
+    this.setData({
+      msgList: msgList
+    })
     //测试发自定义消息
     // const pMessage = parseFromLocal(chatType, chatId, message, 'custom')
     // msgObj.set({
