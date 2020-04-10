@@ -116,14 +116,12 @@ import _utils from './utils'
     };
     Message.custom.prototype.set = function (opt) {
         this.value = '';
-
         this.body = {
             id: this.id,
             to: opt.to
-            , action: opt.action
+            , params: opt.params
             , customEvent: opt.customEvent
             , customExts: opt.customExts
-            , msg: this.value
             , type: this.type
             , roomType: opt.roomType
             , ext: opt.ext || {}

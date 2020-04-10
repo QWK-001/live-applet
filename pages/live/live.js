@@ -119,7 +119,8 @@ Page({
     nickName: '',
     myUserName: '',
     nickName: '',
-    textMsg: ''
+    textMsg: '',
+    audience: 0
   },
   onLoad: function (option) {
     console.log('coption.query', option.query)
@@ -132,7 +133,8 @@ Page({
       roomId: option.id,
       nickName: option.name,
       myUserName: userInfo.userName,
-      nickName: userInfo.nickName
+      nickName: userInfo.nickName,
+      audience: userInfo.audience
     })
     wx.getSystemInfo({
       success: function (res) {
@@ -186,7 +188,7 @@ Page({
       textMsg: e.detail.value
     })
   },
-  //发送弹幕
+  //发送普通消息
   sendTextMsg() {
     let self = this;
     this.onHideInput()
@@ -217,32 +219,107 @@ Page({
     this.setData({
       msgList: msgList
     })
-    //测试发自定义消息
-    // const pMessage = parseFromLocal(chatType, chatId, message, 'custom')
-    // msgObj.set({
-    //     to,
-    //     roomType: chatroom,
-    //     chatType: 'singleChat',
-    //     customEvent: 'customEvent',
-    //     customExts: {qw: 123},
-    //     params: {a: 33},
-    //     success: function () {
-    //         dispatch(Creators.updateMessageStatus(pMessage, 'sent'))
-    //     },
-    //     fail: function () {
-    //         dispatch(Creators.updateMessageStatus(pMessage, 'fail'))
-    //     },
-    //     ext: {a: 1}
-    // })
+    
+  },
+
+  //发礼物消息
+  sendGift() {
+    let self = this;
+    let roomId = this.data.roomId
+    let from = this.data.myUserName
+    let id = wx.WebIM.conn.getUniqueId(); 
+    let msg = new wx.WebIM.message('custom', id); 
+    //不同的礼物修改 id {gift_1: '香水玫瑰', gift_2: '心想事成', ...}
+    msg.set({
+        to: roomId,
+        roomType: true,
+        customEvent: 'chatroom_gift',
+        customExts: {note: '香水玫瑰'},
+        params: {id: 'gift_1', num: 1},
+        success: function () {
+          console.log('send private text Success'); 
+        },
+        fail: function () {
+        },
+        ext: {}
+    })
+    msg.setGroup('groupchat');
+
+    console.log('msg', msg)
+    wx.WebIM.conn.send(msg.body);
+    let msgList = self.data.msgList
+    msgList.push(msg.body)
+    this.setData({
+      msgList: msgList
+    })
+  },
+
+  // 发点赞消息
+  giveLike() {
+    let self = this;
+    let roomId = this.data.roomId
+    let from = this.data.myUserName
+    let id = wx.WebIM.conn.getUniqueId(); 
+    let msg = new wx.WebIM.message('custom', id); 
+    msg.set({
+        to: roomId,
+        roomType: true,
+        customEvent: 'chatroom_praise',
+        customExts: {note: '点赞'},
+        params: {num: 1},
+        success: function () {
+          console.log('send private text Success'); 
+        },
+        fail: function () {
+        },
+        ext: {}
+    })
+    msg.setGroup('groupchat');
+
+    console.log('msg', msg)
+    wx.WebIM.conn.send(msg.body);
+    let msgList = self.data.msgList
+    msgList.push(msg.body)
+    this.setData({
+      msgList: msgList
+    })
+  },
+
+  // 发弹幕消息
+  sendSubtitles(){
+    let self = this;
+    let roomId = this.data.roomId
+    let from = this.data.myUserName
+    let id = wx.WebIM.conn.getUniqueId(); 
+    let msg = new wx.WebIM.message('custom', id); 
+    msg.set({
+        to: roomId,
+        roomType: true,
+        customEvent: 'chatroom_barrage',
+        customExts: {note: '弹幕'},
+        params: {txt: '弹幕'},
+        success: function () {
+          console.log('send private text Success'); 
+        },
+        fail: function () {
+        },
+        ext: {}
+    })
+    msg.setGroup('groupchat');
+
+    console.log('msg', msg)
+    wx.WebIM.conn.send(msg.body);
+    let msgList = self.data.msgList
+    msgList.push(msg.body)
+    this.setData({
+      msgList: msgList
+    })
   },
   // 退出直播间
   exitLiveRoom() {
     console.log('退出');
   },
-  // 点赞
-  giveLike() {
-
-  },
+  
   // 显示礼物弹窗
   giftModa() {
     this.setData({

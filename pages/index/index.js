@@ -1,4 +1,5 @@
 const app = getApp();
+import disp from "../../utils/dispatcher";
 Page({
   cursor: '',
   data: {
@@ -8,6 +9,9 @@ Page({
   },
   onLoad() {
     let self = this;
+    disp.on('app.loginSuccess', function(){
+      self.getLiveRooms(5, '', callback)
+    })
     wx.getSystemInfo({
       success: function (res) {
         let w = res.windowWidth;
@@ -20,8 +24,6 @@ Page({
         })
       },
     })
-
-    this.getLiveRooms(5, '', callback)
 
     function callback(res){
       let list = res.data.entities
@@ -100,6 +102,7 @@ Page({
     }
   },
   getLiveRooms(limit, cursor, callback){
+    let self = this;
     wx.request({
       url: 'https://a1-hsb.easemob.com/appserver/liverooms',
       data: {
@@ -108,7 +111,7 @@ Page({
       },
       header: {
         'content-type': 'application/json',
-        Authorization: 'Bearer YWMtAXs7anQAEeqWBpHuq-M6OegrzF8zZk2Wp8GS3pF-orBygEswZ3AR6oeZcaPHhOyhAwMAAAFxNTHrXQBPGgArP-xWEpAbJQqBqj54vLgVFeBCB6sd_lmQGS5o5vHOmA'
+        Authorization: 'Bearer ' + getApp().globalData.token
       },
       success (res) {
         callback(res)
@@ -148,7 +151,7 @@ Page({
 
     function successFun(res){
       wx.navigateTo({
-        url: `/pages/live/live?id=${liveroom.id}&name=${liveroom.name}&owner=${liveroom.owner}`,
+        url: `/pages/live/live?id=${liveroom.id}&name=${liveroom.name}&owner=${liveroom.owner}&audience=${liveroom.showid}`,
       })
     }
     function errorFun(e){

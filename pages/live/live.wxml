@@ -21,7 +21,7 @@
           <image class="head-style" src="/images/head.png" />
           <image class="head-style" src="/images/head.png" />
           <!-- 当前观看人数 -->
-          <view class="numPeople">1000人</view>
+          <view class="numPeople">{{audience}}人</view>
         </view>
       </view>
     </view>

@@ -2,6 +2,7 @@
 import WebIM from './utils/im';
 import utils from './utils/util';
 import USERS from './utils/users';
+import disp from "./utils/dispatcher";
 App({
   onLaunch: function () {
 
@@ -263,6 +264,7 @@ App({
     })
   },
   autoLogin(userName, password){
+    var self = this;
     WebIM.conn.open({
       apiUrl: WebIM.config.apiURL,
       user: userName,
@@ -270,6 +272,8 @@ App({
       appKey: WebIM.config.appkey,
       success(token) {
         console.log('登录成功', token)
+        self.globalData.token = token.access_token
+        disp.fire("app.loginSuccess");
       },
       error: e => {
         console.log('登录失败', e)
@@ -303,6 +307,7 @@ App({
   globalData: {
     userInfo: null,
     width: 0,
-    height: 0
+    height: 0,
+    token: ''
   }
 })
