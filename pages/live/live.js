@@ -214,6 +214,7 @@ Page({
 
     console.log('msg', msg)
     wx.WebIM.conn.send(msg.body);
+    msg.body.nickName = self.data.nickName
     let msgList = self.data.msgList
     msgList.push(msg.body)
     this.setData({
@@ -241,12 +242,13 @@ Page({
         },
         fail: function () {
         },
-        ext: {}
+        ext: {nickName: self.data.nickName}
     })
     msg.setGroup('groupchat');
 
     console.log('msg', msg)
     wx.WebIM.conn.send(msg.body);
+    msg.body.nickName = self.data.nickName
     let msgList = self.data.msgList
     msgList.push(msg.body)
     this.setData({
@@ -272,12 +274,13 @@ Page({
         },
         fail: function () {
         },
-        ext: {}
+        ext: {nickName: self.data.nickName}
     })
     msg.setGroup('groupchat');
 
     console.log('msg', msg)
     wx.WebIM.conn.send(msg.body);
+    msg.body.nickName = self.data.nickName
     let msgList = self.data.msgList
     msgList.push(msg.body)
     this.setData({
@@ -303,12 +306,13 @@ Page({
         },
         fail: function () {
         },
-        ext: {}
+        ext: {nickName: self.data.nickName}
     })
     msg.setGroup('groupchat');
 
     console.log('msg', msg)
     wx.WebIM.conn.send(msg.body);
+    msg.body.nickName = self.data.nickName
     let msgList = self.data.msgList
     msgList.push(msg.body)
     this.setData({

@@ -43,7 +43,7 @@
         <!-- 聊天 -->
         <view style="height:{{commentHeight}}px" class="comment">
           <view class="comment-list" wx:for="{{msgList}}">
-            <text class="name">{{item.from}}:</text>
+            <text class="name">{{item.nickName}}:</text>
             <text style="color:#FFC700">{{item.msg}}</text>
           </view>
         </view>
