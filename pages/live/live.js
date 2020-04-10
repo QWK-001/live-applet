@@ -223,7 +223,7 @@ Page({
   },
 
   //发礼物消息
-  sendGift() {
+  sendGiftMsg(gift) {
     let self = this;
     let roomId = this.data.roomId
     let from = this.data.myUserName
@@ -234,8 +234,8 @@ Page({
         to: roomId,
         roomType: true,
         customEvent: 'chatroom_gift',
-        customExts: {note: '香水玫瑰'},
-        params: {id: 'gift_1', num: 1},
+        customExts: {note: self.data.giftModaData.giftName},
+        params: {id: 'gift_' + self.data.giftModaData.showGiftId, num: 1},
         success: function () {
           console.log('send private text Success'); 
         },
@@ -338,6 +338,9 @@ Page({
     let showGiftId = 'giftModaData.showGiftId'
     let showGivesModa = 'giftModaData.showGivesModa'
     let giftName = 'giftModaData.giftName'
+
+    console.log(id)
+    console.log(e.currentTarget.dataset.giftid.name)
     this.setData({
       [showGiftId]: id,
       [showGivesModa]: true,
@@ -346,5 +349,6 @@ Page({
   },
   giftSubmit(e){
     console.log('e>>>',e);
+    this.sendGiftMsg()
   }
 });
