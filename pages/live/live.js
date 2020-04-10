@@ -134,7 +134,7 @@ Page({
       roomName: option.name,
       myUserName: userInfo.userName,
       nickName: userInfo.nickName,
-      audience: userInfo.audience
+      audience: option.audience
     })
     wx.getSystemInfo({
       success: function (res) {
