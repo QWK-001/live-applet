@@ -131,7 +131,7 @@ Page({
 
     self.setData({
       roomId: option.id,
-      nickName: option.name,
+      roomName: option.name,
       myUserName: userInfo.userName,
       nickName: userInfo.nickName,
       audience: userInfo.audience

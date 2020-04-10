@@ -13,7 +13,7 @@
       <view class="navbar">
         <view class="user-style" bindtap="showHostDetail">
           <image class="head-style" src="/images/live-logo.png" />
-          <text style="margin:0 10px">userName</text>
+          <text style="margin:0 10px">{{roomName}}</text>
         </view>
         <!-- 礼物榜单列表（暂时写死） -->
         <view class="user-right-style">
