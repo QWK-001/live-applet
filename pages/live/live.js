@@ -1,5 +1,5 @@
 var sliderWidth = 96; // 需要设置slider的宽度，用于计算中间位置
-
+import USERS from '../../utils/users';
 Page({
   data: {
     buttons: [{ text: '关闭' }],
@@ -144,6 +144,23 @@ Page({
         });
       }
     });
+
+    //收到普通消息
+    disp.on('onTextMessage', function(message){
+      let nickName = USERS[parseInt(Math.random()*USERS.length)].nick
+      message.nickName = nickName
+      let msgList = self.data.msgList
+      msgList.push(message)
+      this.setData({
+        msgList: msgList
+      })
+    })
+
+    //收到自定义消息 包括弹幕 礼物 点赞
+    disp.on('onCustomMessage', function(message){
+
+    })
+
   },
   //点击出现输入框
   showInput: function () {

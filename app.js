@@ -111,65 +111,16 @@ App({
         }
       },
 
-      onRoster(message){
-        // let pages = getCurrentPages();
-        // if(pages[0]){
-        //  pages[0].onShow();
-        // }
-      },
-      
-      onCmdMessage(message){
-        console.log("onCmdMessage", message);
-        if(message){
-          if(onMessageError(message)){
-            msgStorage.saveReceiveMsg(message, msgType.CMD);
-          }
-          calcUnReadSpot(message);
-          ack(message);
-        }
-      },
-
       onTextMessage(message){
         console.log("onTextMessage", message);
         if(message){
-          if(onMessageError(message)){
-            msgStorage.saveReceiveMsg(message, msgType.TEXT);
-          }
-          calcUnReadSpot(message);
-          ack(message);
-
-          if(message.ext.msg_extension){
-            let msgExtension = JSON.parse(message.ext.msg_extension)
-            let conferenceId = message.ext.conferenceId
-            let password = message.ext.password
-            disp.fire("em.xmpp.videoCall", {
-              msgExtension: msgExtension,
-              conferenceId: conferenceId,
-              password: password
-            });
-          }
+          disp.fire('app.onTextMessage', message)
         }
       },
-
-      onEmojiMessage(message){
-        console.log("onEmojiMessage", message);
+      onCustomMessage(message){
+        console.log("onCustomMessage", message);
         if(message){
-          if(onMessageError(message)){
-            msgStorage.saveReceiveMsg(message, msgType.EMOJI);
-          }
-          calcUnReadSpot(message);
-          ack(message);
-        }
-      },
-
-      onPictureMessage(message){
-        console.log("onPictureMessage", message);
-        if(message){
-          if(onMessageError(message)){
-            msgStorage.saveReceiveMsg(message, msgType.IMAGE);
-          }
-          calcUnReadSpot(message);
-          ack(message);
+          disp.fire('app.onCustomMessage', message)
         }
       },
 
