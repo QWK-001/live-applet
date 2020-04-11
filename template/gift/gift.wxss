@@ -36,14 +36,28 @@
 .active {
     box-shadow: rgb(11, 234, 235) 0px 0px 10px inset;
 }
-.btn-area,.section{
+
+.btn-area,
+.section {
     display: inline-block;
 }
-.section{
+
+.section {
     margin-right: 10px;
 }
-.gift-text{
+
+.gift-text {
     position: relative;
-    bottom: 15px;
-    right: 10px;
+    bottom  : 15px;
+    right   : 10px;
+}
+
+.gift-record {
+    position: absolute;
+    right   : 0;
+    top: 11px;
+    color: rgba(255, 255, 255,.5)
+}
+.gift-record .gf-text{
+    margin-right: 10px;
 }

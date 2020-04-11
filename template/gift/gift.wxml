@@ -26,9 +26,13 @@
       </view>
     </view>
     <!-- 主播查看礼物模块 -->
-    <view wx:else>
+    <view wx:else style="width:100%;padding:20rpx;font-size:15px;color:rgba(255,255,255,.8)">
       <image src="/images/gift@2x.png" style="width:13px;height:13px;margin-right:10px" />
       <text class="giftModa-item">礼物记录</text>
+      <view class="gift-record">
+        <text class="gf-text">共{{0}}份</text>
+        <text class="gf-text">打赏人数{{0}}人</text>
+      </view>
     </view>
   </view>
 </template>

@@ -7,11 +7,12 @@ Page({
     hostShow: false, //主播详情弹窗
     showGiftModa: false, // 礼物弹窗
     isAttention: false, // 关注主播
+    showMemberListModa: true, // 成员列表弹窗
     giftModaData: {  // 礼物模块数据（主播、粉丝）
       status: 'fans',//直播间身份（粉丝）
       showGivesModa: false,//显隐送礼模块
       giftName: '',
-      giftNumValue:'1', // 礼物数量
+      giftNumValue: '1', // 礼物数量
       giftData: [
         {
           key: '1',
@@ -76,7 +77,20 @@ Page({
       }]
 
     },
-
+    memberListModa: {
+      List: [  // 成员列表模块数据
+        {
+          member: '13800138001',
+          src: '/images/head.png'
+        }, {
+          member: 'user1',
+          src: '/images/head.png'
+        }, {
+          member: 'user2',
+          src: '/images/head.png'
+        }
+      ],
+    },
     danmuList: [
       {
         text: '这是我的弹幕',
@@ -215,17 +229,17 @@ Page({
     let id = wx.WebIM.conn.getUniqueId();                 // 生成本地消息id
     let msg = new wx.WebIM.message('txt', id);      // 创建文本消息
     msg.set({
-        msg: tsxtMsg,                            // 消息内容
-        to: roomId, 
-        from,
-        roomType: true,
-        ext: {nickName: this.data.nickName},                                 //扩展消息
-        success: function (id, serverMsgId) {
-            console.log('send private text Success');  
-        },
-        fail: function(e){
-            console.log("Send private text error");  
-        }
+      msg: tsxtMsg,                            // 消息内容
+      to: roomId,
+      from,
+      roomType: true,
+      ext: { nickName: this.data.nickName },                                 //扩展消息
+      success: function (id, serverMsgId) {
+        console.log('send private text Success');
+      },
+      fail: function (e) {
+        console.log("Send private text error");
+      }
     });
     msg.setGroup('groupchat');
 
@@ -347,10 +361,17 @@ Page({
       showGiftModa: true
     })
   },
-  // 关闭礼物弹窗
+  //显示成员列表弹窗
+  changeMemberListModa() {
+    this.setData({
+      showMemberListModa: true
+    })
+  },
+  // 关闭礼物、成员列表弹窗
   closeMask() {
     this.setData({
-      showGiftModa: false
+      showGiftModa: false,
+      showMemberListModa: false
     })
   },
   // 当前选中的礼物

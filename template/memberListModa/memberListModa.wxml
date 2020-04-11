@@ -1,0 +1,15 @@
+<template name="memberListModa">
+    <view class="memberListModa">
+        <view class="mask" bindtap='closeMask'></view>
+        <!-- 观众视角模块 -->
+        <view style="width:100%;padding:20rpx;font-size:15px;color:rgba(255,255,255,.8)">
+            <image src="/images/user2.png" style="width:15px;height:15px;margin-right:10px" />
+            <text class="memberListModa-item">观众{{0}}</text>
+            <!-- 人员列表 -->
+            <view wx:for="{{List}}" wx:for-item="memberList" data-giftid="{{memberList}}">
+                <image src="{{memberList.src}}" />
+                <text>{{memberList.member}}</text>
+            </view>
+        </view>
+    </view>
+</template>

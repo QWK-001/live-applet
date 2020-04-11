@@ -1,4 +1,5 @@
 <import src="../../template/gift/gift.wxml" />
+<import src="../../template/memberListModa/memberListModa.wxml"></import>
 
 <view style="height: {{height}}px">
   <!-- 播放区域 -->
@@ -21,7 +22,7 @@
           <image class="head-style" src="/images/head.png" />
           <image class="head-style" src="/images/head.png" />
           <!-- 当前观看人数 -->
-          <view class="numPeople">{{audience}}人</view>
+          <view class="numPeople" bindtap="changeMemberListModa">{{audience}}人</view>
         </view>
       </view>
     </view>
@@ -103,3 +104,6 @@
 
 <!-- 礼物模块 -->
 <template is="giftModa" data="{{...giftModaData}}" wx:if="{{showGiftModa}}"></template>
+
+<!-- 成员列表模块 -->
+<!-- <template is="memberListModa" data="{{...memberListModa}}" wx:if="{{showMemberListModa}}"></template> -->
