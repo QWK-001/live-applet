@@ -1,4 +1,4 @@
-import IMsdk from "../sdk/connection";
+import IMsdk from "../sdk/webimSDK3.0.10";
 IMsdk.config = {
 	/*
 	 * XMPP server

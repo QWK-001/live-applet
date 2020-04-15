@@ -24,8 +24,8 @@
 	},
 	"compileType": "miniprogram",
 	"libVersion": "1.9.98",
-	"appid": "wx382c2b02d8bb6bcf",
-	"projectname": "%E7%8E%AF%E4%BF%A1%E7%9B%B4%E6%92%ADDemo",
+	"appid": "wx1f978d05e9d87562",
+	"projectname": "live-applet",
 	"simulatorType": "wechat",
 	"simulatorPluginLibVersion": {},
 	"condition": {
