@@ -3,6 +3,7 @@ Page({
   data: {
     width: 0,
     height: 0,
+    liveroomsList: [],
     imgUrls: [
       {
         id: '1',
@@ -78,24 +79,104 @@ Page({
   },
   onLoad() {
     let self = this;
+    self.getLiveRooms(5, '', callback)
+
     wx.getSystemInfo({
       success: function (res) {
         console.log('res:', res)
       },
     })
 
+    function callback(res) {
+      let list = res.data.entities
+      self.cursor = res.data.cursor
+      self.setData({
+        liveroomsList: [{
+          data: list
+        }]
+      })
+    }
+  },
 
+
+  onPullDownRefresh() {
+    let self = this;
+    self.getLiveRooms(5, self.cursor, callback)
+    function callback(res) {
+      if (!res.data.entities) {
+        wx.showToast({
+          title: '已无更多数据',
+          icon: 'none',
+          duration: 2000
+        })
+        wx.stopPullDownRefresh()
+        return
+      }
+      let list = res.data.entities
+      let currentList = list.concat(self.data.liveroomsList[0].data)
+      self.cursor = res.data.cursor
+      self.setData({
+        liveroomsList: [{
+          label: '热门直播',
+          labelId: '10001',
+          data: currentList
+        }]
+      })
+      console.log('list..', list)
+      wx.stopPullDownRefresh()
+    }
   },
-  detail() {
-    wx.navigateTo({
-      url: `/pages/detail/detail`,
+  getLiveRooms(limit, cursor, callback) {
+    let self = this;
+    wx.request({
+      url: 'https://a1-hsb.easemob.com/appserver/liverooms',
+      data: {
+        limit: limit,
+        cursor: cursor
+      },
+      header: {
+        'content-type': 'application/json',
+        Authorization: 'Bearer ' + getApp().globalData.token
+      },
+      success(res) {
+        callback(res)
+      },
+      fail(e) {
+        callback(e)
+      }
     })
   },
-  createdLive() {
-    console.log('创建》》》');
-    
-    wx.navigateTo({
-      // url: `/pages/live/live`,
+
+  createdLive(e) {
+    console.log('liveroom', e)
+    let liveroom = e.currentTarget.dataset.liveroom
+    // {
+    //   affiliations_count: 3
+    //   cover: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1585649298994&di=4a23a41095ba858b3275b9a9312eea81&imgtype=0&src=http%3A%2F%2Fa4.att.hudong.com%2F21%2F09%2F01200000026352136359091694357.jpg"
+    //   created: 1585639782505
+    //   description: "快来嗨"
+    //   ext: {test: true}
+    //   id: "111402163437571"
+    //   name: "神仙姐姐"
+    //   owner: "fca64a28a115453cb902b11ace29baf5"
+    //   showid: 3
+    //   status: "offline"
+    // }
+
+    //进入直播间
+    wx.WebIM.conn.joinChatRoom({
+      roomId: liveroom.id,
+      success: successFun,
+      error: errorFun
     })
+
+    function successFun(res) {
+      wx.navigateTo({
+        url: `/pages/live/live?id=${liveroom.id}&name=${liveroom.name}&owner=${liveroom.owner}&audience=${liveroom.affiliations_count}&identity=compere`,
+      })
+    }
+    function errorFun(e) {
+      console.log('加入失败', e)
+    }
   }
 })

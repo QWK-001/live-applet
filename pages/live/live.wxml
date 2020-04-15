@@ -1,6 +1,5 @@
 <import src="../../template/gift/gift.wxml" />
 <import src="../../template/memberListModa/memberListModa.wxml"></import>
-
 <view style="height: {{height}}px">
   <!-- 播放区域 -->
   <image class="bg-img" mode="{{widthFix}}" src="{{src}}"></image>
@@ -39,7 +38,7 @@
             <image class="lwImg" src="/images/lw1.png" />
             <text style="font-size:15px">x1</text>
           </view>
-          <text style="color:rgba(255, 255, 255, .5)">xxx进入了直播间。</text>
+          <!-- <text style="color:rgba(255, 255, 255, .5)">xxx进入了直播间。</text> -->
         </view>
         <!-- 聊天 -->
         <view style="height:{{commentHeight}}px" class="comment">
@@ -52,8 +51,8 @@
         <view class="send">
           <image wx:if="{{!showInput}}" src="/images/ic_comments@2x.png" class="icon" bindtap="showInput"></image>
           <view style="position: fixed;right:0">
-            <image src="/images/ic_Chat@2x.png" class="icon foot-icon" bindtap="exitLiveRoom"></image> 
-            <image src="/images/ic_Share@2x.png" class="icon foot-icon" bindtap="giveLike"></image>
+            <image src="/images/ic_Chat@2x.png" class="icon foot-icon" bindtap="exitLiveRoom"></image>
+            <image wx:if="{{giftModaData.identity !== 'compere'}}" src="/images/ic_Share@2x.png" class="icon foot-icon" bindtap="giveLike"></image>
             <image src="/images/ic_Gift@2x.png" class="icon foot-icon" bindtap="giftModa"></image>
           </view>
         </view>
@@ -73,37 +72,37 @@
     </view>
   </view>
 </view>
-<!-- 主播详情弹窗 --> 
+<!-- 主播详情弹窗 -->
 <mp-dialog show="{{hostShow}}" bindbuttontap="tapDialogButton" buttons="{{buttons}}">
   <view class="userInfo">
     <view class="left">
-      <image src="/images/6.png" class="avatar"></image>
-      <view class="info">
-        <view class="username">大嘴</view>
+      <image src="/images/head.png" class="avatar"></image>
+       <view class="info">
+        <view class="username">{{roomName}}</view>
         <view class="gift">
-          <text>礼物 <text class="num">1002</text></text>
-          <text class="fans">粉丝 <text class="num">1.3w</text></text>
-          <text class="fans">被赞 <text class="num">1.3w</text></text>
+          <text>礼物 <text class="num">0</text></text>
+          <text class="fans">粉丝 <text class="num">0</text></text>
+          <text class="fans">被赞 <text class="num">0</text></text>
         </view>
       </view>
     </view>
-    <view class="right" wx:if="{{isAttention}}">
-      <view class="attention" bindtap="clickAttention">
-        <text class="fa fa-plus"></text>
-        <text>关注</text>
+    <view wx:if="{{giftModaData.identity !== 'compere'}}">
+      <view class="right" wx:if="{{isAttention}}">
+        <view class="attention" bindtap="clickAttention">
+          <text class="fa fa-plus"></text>
+          <text>关注</text>
+        </view>
       </view>
-    </view>
-    <view class="right" wx:else>
-      <view class="attentionCancel" bindtap="clickAttention">
-        <mp-icon type="field" icon="close" color="#fff" size="{{18}}"></mp-icon>
-        <text>取消关注</text>
+      <view class="right" wx:else>
+        <view class="attentionCancel" bindtap="clickAttention">
+          <mp-icon type="field" icon="close" color="#fff" size="{{18}}"></mp-icon>
+          <text>取消关注</text>
+        </view>
       </view>
     </view>
   </view>
 </mp-dialog>
-
 <!-- 礼物模块 -->
 <template is="giftModa" data="{{...giftModaData}}" wx:if="{{showGiftModa}}"></template>
-
 <!-- 成员列表模块 -->
-<!-- <template is="memberListModa" data="{{...memberListModa}}" wx:if="{{showMemberListModa}}"></template> -->
+<template is="memberListModa" data="{{...memberListModa}}" wx:if="{{showMemberListModa}}"></template>

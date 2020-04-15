@@ -12,7 +12,7 @@
       <view class="userinfo">
         <text class="username">{{cardData.owner}}</text>
         <view class="count">
-          <text style="margin-left:4rpx;">{{cardData.showid}}正在看</text>
+          <text style="margin-left:4rpx;">{{cardData.affiliations_count}}正在看</text>
         </view>
       </view>
     </view>
@@ -22,7 +22,7 @@
 <template name="activeCard">
   <view class="card">
     <view class="card-item" wx:for="{{data}}" wx:for-item="cardData" wx:key="{{cardData.userId}}">
-      <view wx:if="{{cardData.status === 'offline'}}" style="height:320rpx" bindtap='createdLive'>
+      <view wx:if="{{cardData.status === 'offline'}}" style="height:320rpx" data-liveroom="{{cardData}}" bindtap='createdLive'>
         <image src="{{cardData.url}}" class="activeCard-bg"></image>
         <!-- 立即开播状态 -->
         <image class="open-live" src="/images/lijikaibo.png" />
@@ -31,12 +31,12 @@
       <!-- 直播中（无法点击） -->
       <view wx:else >
         <view class="off-bg"></view>
-        <image src="{{cardData.url}}" mode="widthFix" class="pictrue"></image>
+        <image src="{{cardData.cover}}" mode="widthFix" class="pictrue"></image>
         <image class="off-live" src="/images/noChange.png"/>
         <view class="userinfo">
-          <text class="username">{{cardData.username}}</text>
+          <text class="username">{{cardData.owner}}</text>
           <view class="count">
-            <text style="margin-left:4rpx;">{{cardData.count}}正在看</text>
+            <text style="margin-left:4rpx;">{{cardData.affiliations_count}}正在看</text>
           </view>
         </view>
       </view>

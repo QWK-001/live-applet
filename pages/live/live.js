@@ -1,5 +1,6 @@
 var sliderWidth = 96; // 需要设置slider的宽度，用于计算中间位置
 import USERS from '../../utils/users';
+import disp from "../../utils/dispatcher";
 Page({
   data: {
     buttons: [{ text: '关闭' }],
@@ -7,9 +8,9 @@ Page({
     hostShow: false, //主播详情弹窗
     showGiftModa: false, // 礼物弹窗
     isAttention: false, // 关注主播
-    showMemberListModa: true, // 成员列表弹窗
+    showMemberListModa: false, // 成员列表弹窗
     giftModaData: {  // 礼物模块数据（主播、粉丝）
-      status: 'fans',//直播间身份（粉丝）
+      identity: '',//直播间身份（粉丝）
       showGivesModa: false,//显隐送礼模块
       giftName: '',
       giftNumValue: '1', // 礼物数量
@@ -65,31 +66,17 @@ Page({
       ],
 
       showGiftId: 0,
-      options: [{
-        city_id: '001',
-        city_name: '北京'
-      }, {
-        city_id: '002',
-        city_name: '上海'
-      }, {
-        city_id: '003',
-        city_name: '深圳'
-      }]
-
     },
     memberListModa: {
-      List: [  // 成员列表模块数据
-        {
-          member: '13800138001',
-          src: '/images/head.png'
-        }, {
-          member: 'user1',
-          src: '/images/head.png'
-        }, {
-          member: 'user2',
-          src: '/images/head.png'
-        }
-      ],
+      affiliations_count: '',// 观看成员人数
+      list: [],// 成员列表模块数据
+      whiteList:[],// 白名单列表
+      switchChecked:false, //房间禁言
+      tabs: ["观众", "白名单", "用户禁言"],
+      type: '',
+      activeIndex: 0,
+      sliderOffset: 0,
+      sliderLeft: 0,
     },
     danmuList: [
       {
@@ -102,28 +89,6 @@ Page({
         color: '#ff00ff',
         time: 3
       }],
-    commentList: [
-      {
-        name: '一直玫瑰花',
-        info: '这是环信的直播吧'
-      },
-      {
-        name: '一路信服',
-        info: '是的吧'
-      },
-      {
-        name: '我是一直廊',
-        info: '我也是刚听说就来看看'
-      },
-      {
-        name: '一路信服',
-        info: '是的吧'
-      },
-      {
-        name: '一路信服',
-        info: '是的吧'
-      }
-    ],
     msgList: [],
     src: '/images/bgImg.jpg',
     showInput: false,
@@ -137,22 +102,29 @@ Page({
     audience: 0
   },
   onLoad: function (option) {
-    console.log('coption.query', option.query)
+    console.log('coption.query', option)
     var self = this;
 
     let userName = wx.getStorageSync('userName')
     let userInfo = JSON.parse(userName)
-
+    let identity = 'giftModaData.identity'
+    let type = 'memberListModa.type'
     self.setData({
       roomId: option.id,
       roomName: option.name,
       myUserName: userInfo.userName,
       nickName: userInfo.nickName,
-      audience: option.audience
+      audience: option.audience,
+      [identity]: option.identity,
+      [type]: option.identity
     })
     wx.getSystemInfo({
       success: function (res) {
+        console.log('res>>>>', self.data);
+
         self.setData({
+          sliderLeft: (res.windowWidth / self.data.memberListModa.tabs.length - sliderWidth) / 2,
+          sliderOffset: res.windowWidth / self.data.memberListModa.tabs.length * self.data.memberListModa.activeIndex,
           commentHeight: res.windowHeight - 550,
           height: res.windowHeight
         });
@@ -160,8 +132,8 @@ Page({
     });
 
     //收到普通消息
-    disp.on('onTextMessage', function(message){
-      let nickName = USERS[parseInt(Math.random()*USERS.length)].nick
+    disp.on('onTextMessage', function (message) {
+      let nickName = USERS[parseInt(Math.random() * USERS.length)].nick
       message.nickName = nickName
       let msgList = self.data.msgList
       msgList.push(message)
@@ -171,9 +143,38 @@ Page({
     })
 
     //收到自定义消息 包括弹幕 礼物 点赞
-    disp.on('onCustomMessage', function(message){
+    disp.on('onCustomMessage', function (message) {
 
     })
+
+  },
+
+
+  tabClick: function (e) {
+    let self = this
+    let sliderOffset = 'memberListModa.sliderOffset'
+    let activeIndex = 'memberListModa.activeIndex'
+    self.setData({
+      [sliderOffset]: e.currentTarget.offsetLeft,
+      [activeIndex]: e.currentTarget.id
+    });
+    let val = e.currentTarget.id
+    switch (val) {
+      case '1':
+        self.getChatRoomWhitelist()
+        // function callback(res){
+        //   console.log('1111111');
+        //   let whiteList = 'memberListModa.whiteList'
+        //   this.setData({
+        //     [whiteList]:res.entities
+        //   })
+        // }
+        break;
+      case '2':
+        break
+      default:
+        break;
+    }
 
   },
   //点击出现输入框
@@ -251,7 +252,7 @@ Page({
     this.setData({
       msgList: msgList
     })
-    
+
   },
 
   //发礼物消息
@@ -259,21 +260,21 @@ Page({
     let self = this;
     let roomId = this.data.roomId
     let from = this.data.myUserName
-    let id = wx.WebIM.conn.getUniqueId(); 
-    let msg = new wx.WebIM.message('custom', id); 
+    let id = wx.WebIM.conn.getUniqueId();
+    let msg = new wx.WebIM.message('custom', id);
     //不同的礼物修改 id {gift_1: '香水玫瑰', gift_2: '心想事成', ...}
     msg.set({
-        to: roomId,
-        roomType: true,
-        customEvent: 'chatroom_gift',
-        customExts: {note: self.data.giftModaData.giftName},
-        params: {id: 'gift_' + self.data.giftModaData.showGiftId, num: 1},
-        success: function () {
-          console.log('send private text Success'); 
-        },
-        fail: function () {
-        },
-        ext: {nickName: self.data.nickName}
+      to: roomId,
+      roomType: true,
+      customEvent: 'chatroom_gift',
+      customExts: { note: self.data.giftModaData.giftName },
+      params: { id: 'gift_' + self.data.giftModaData.showGiftId, num: 1 },
+      success: function () {
+        console.log('send private text Success');
+      },
+      fail: function () {
+      },
+      ext: { nickName: self.data.nickName }
     })
     msg.setGroup('groupchat');
 
@@ -292,20 +293,20 @@ Page({
     let self = this;
     let roomId = this.data.roomId
     let from = this.data.myUserName
-    let id = wx.WebIM.conn.getUniqueId(); 
-    let msg = new wx.WebIM.message('custom', id); 
+    let id = wx.WebIM.conn.getUniqueId();
+    let msg = new wx.WebIM.message('custom', id);
     msg.set({
-        to: roomId,
-        roomType: true,
-        customEvent: 'chatroom_praise',
-        customExts: {note: '点赞'},
-        params: {num: 1},
-        success: function () {
-          console.log('send private text Success'); 
-        },
-        fail: function () {
-        },
-        ext: {nickName: self.data.nickName}
+      to: roomId,
+      roomType: true,
+      customEvent: 'chatroom_praise',
+      customExts: { note: '点赞' },
+      params: { num: 1 },
+      success: function () {
+        console.log('send private text Success');
+      },
+      fail: function () {
+      },
+      ext: { nickName: self.data.nickName }
     })
     msg.setGroup('groupchat');
 
@@ -320,24 +321,24 @@ Page({
   },
 
   // 发弹幕消息
-  sendSubtitles(){
+  sendSubtitles() {
     let self = this;
     let roomId = this.data.roomId
     let from = this.data.myUserName
-    let id = wx.WebIM.conn.getUniqueId(); 
-    let msg = new wx.WebIM.message('custom', id); 
+    let id = wx.WebIM.conn.getUniqueId();
+    let msg = new wx.WebIM.message('custom', id);
     msg.set({
-        to: roomId,
-        roomType: true,
-        customEvent: 'chatroom_barrage',
-        customExts: {note: '弹幕'},
-        params: {txt: '弹幕'},
-        success: function () {
-          console.log('send private text Success'); 
-        },
-        fail: function () {
-        },
-        ext: {nickName: self.data.nickName}
+      to: roomId,
+      roomType: true,
+      customEvent: 'chatroom_barrage',
+      customExts: { note: '弹幕' },
+      params: { txt: '弹幕' },
+      success: function () {
+        console.log('send private text Success');
+      },
+      fail: function () {
+      },
+      ext: { nickName: self.data.nickName }
     })
     msg.setGroup('groupchat');
 
@@ -353,8 +354,24 @@ Page({
   // 退出直播间
   exitLiveRoom() {
     console.log('退出');
+    let roomId = this.data.roomId
+    wx.WebIM.conn.quitChatRoom({
+      roomId: roomId,
+      success: successFun,
+      error: errorFun
+    })
+
+    function successFun(res) {
+      wx.switchTab({
+        url: '/pages/index/index',
+      })
+    }
+    function errorFun(e) {
+      console.log('退出失败', e)
+    }
   },
-  
+
+
   // 显示礼物弹窗
   giftModa() {
     this.setData({
@@ -363,9 +380,20 @@ Page({
   },
   //显示成员列表弹窗
   changeMemberListModa() {
-    this.setData({
+    let self = this
+    self.getLiveRoomsMember(callback)
+    self.setData({
       showMemberListModa: true
     })
+
+    function callback(res) {
+      let affiliations_count = 'memberListModa.affiliations_count'
+      let list = 'memberListModa.list'
+      self.setData({
+        [affiliations_count]: res.data.affiliations_count,
+        [list]: res.data.affiliations
+      })
+    }
   },
   // 关闭礼物、成员列表弹窗
   closeMask() {
@@ -389,8 +417,93 @@ Page({
       [giftName]: e.currentTarget.dataset.giftid.name
     })
   },
-  giftSubmit(e){
-    console.log('e>>>',e);
+  giftSubmit(e) {
     this.sendGiftMsg()
-  }
+    this.setData({showGiftModa: false})
+  },
+
+  //获取直播间成员详情
+  getLiveRoomsMember(callback) {
+    let liveroomid = this.data.roomId
+    wx.request({
+      url: `https://a1-hsb.easemob.com/appserver/liverooms/${liveroomid}`,
+      header: {
+        'content-type': 'application/json',
+        Authorization: 'Bearer ' + getApp().globalData.token
+      },
+      success(res) {
+        callback(res)
+      },
+      fail(e) {
+        callback(e)
+      }
+    })
+  },
+
+  // 获取白名单列表
+  getChatRoomWhitelist() {
+    let self = this
+    let liveroomid = this.data.roomId
+    wx.WebIM.conn.getChatRoomWhitelist({
+      chatRoomId: liveroomid,
+      success: successFun,
+      error: errorFun
+    })
+    function successFun(res) {
+      let whiteList = 'memberListModa.whiteList'
+      self.setData({
+        [whiteList]:res.entities
+      })
+    }
+    function errorFun(e) {
+      console.log('白名单列表错误>>', e)
+    }
+  },
+
+  // 房间禁言
+  changeSpeech(e){
+    e.detail.value?this.standSpeech():this.relieve()
+  },
+  // 房间禁言
+  standSpeech(){
+    let self = this
+    let liveroomid = this.data.roomId
+    wx.WebIM.conn.disableSendChatRoomMsg({
+      chatRoomId: liveroomid,
+      success: successFun,
+      error: errorFun
+    })
+    function successFun(res) {
+      let switchChecked = 'memberListModa.switchChecked'
+      self.setData({
+        [switchChecked]:true
+      })
+    }
+    function errorFun(e) {
+      console.log('禁言失败>>', e)
+      let switchChecked = 'memberListModa.switchChecked'
+      self.setData({
+        [switchChecked]:false
+      })
+    }
+  },
+  // 房间解除禁言
+  relieve(){
+    let self = this
+    let liveroomid = this.data.roomId
+    wx.WebIM.conn.enableSendChatRoomMsg({
+      chatRoomId: liveroomid,
+      success: successFun,
+      error: errorFun
+    })
+    function successFun(res) {
+      let switchChecked = 'memberListModa.switchChecked'
+      self.setData({
+        [switchChecked]:false
+      })
+    }
+    function errorFun(e) {
+      console.log('解除禁言失败>>', e)
+    }
+  },
 });

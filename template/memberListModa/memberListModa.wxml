@@ -2,13 +2,59 @@
     <view class="memberListModa">
         <view class="mask" bindtap='closeMask'></view>
         <!-- 观众视角模块 -->
-        <view style="width:100%;padding:20rpx;font-size:15px;color:rgba(255,255,255,.8)">
+        <view class="member-list" wx:if="{{type !== 'compere'}}">
             <image src="/images/user2.png" style="width:15px;height:15px;margin-right:10px" />
-            <text class="memberListModa-item">观众{{0}}</text>
+            <text class="memberListModa-item">观众{{affiliations_count}}</text>
             <!-- 人员列表 -->
-            <view wx:for="{{List}}" wx:for-item="memberList" data-giftid="{{memberList}}">
-                <image src="{{memberList.src}}" />
-                <text>{{memberList.member}}</text>
+            <view class="child-view">
+                <view wx:for="{{list}}" wx:for-item="memberList" data-giftid="{{memberList}}" style="height:80rpx;display:flex;align-items: center;">
+                    <image src="/images/head.png" style="width:28px;height:28px;border-radius: 50%;margin-right:10px" />
+                    <text>{{memberList.member||memberList.owner}}</text>
+                    <text style="color:rgb(0, 195, 255);margin-left:10px">{{memberList.owner&&'管理员'}}</text>
+                </view>
+            </view>
+        </view>
+        <!-- 主播视角 -->
+        <view class="weui-tab" wx:else>
+            <view class="weui-navbar">
+                <block wx:for="{{tabs}}" wx:key="*this">
+                    <view id="{{index}}" class="weui-navbar__item {{activeIndex == index ? 'weui-bar__item_on' : ''}}" bindtap="tabClick">
+                        <view class="weui-navbar__title">{{item}}</view>
+                    </view>
+                </block>
+                <view class="weui-navbar__slider" style="left: {{sliderLeft}}px; transform: translateX({{sliderOffset}}px); -webkit-transform: translateX({{sliderOffset}}px);"></view>
+            </view>
+            <!-- 观众 -->
+            <view class="weui-tab__panel">
+                <view class="weui-tab__content" hidden="{{activeIndex != 0}}" style="top:100rpx;padding:10px">
+                    <view style="float:right;padding-right:10px">
+                        <text>房间禁言</text>
+                        <switch bindchange='changeSpeech' checked="{{switchChecked}}"/>
+                    </view>
+                    <view wx:for="{{list}}" wx:for-item="memberList" data-giftid="{{memberList}}" style="height:80rpx;display:flex;align-items: center;">
+                        <image src="/images/head.png" style="width:28px;height:28px;border-radius: 50%;margin-right:10px" />
+                        <text>{{memberList.member||memberList.owner}}</text>
+                        <text style="color:rgb(0, 195, 255);margin-left:10px">{{memberList.owner&&'管理员'}}</text>
+                    </view>
+                </view>
+            </view>
+            <!-- 白名单 -->
+            <view class="weui-tab__panel">
+                <view class="weui-tab__content" hidden="{{activeIndex != 1}}" style="top:100rpx;padding:10px">
+                    <view wx:for="{{whiteList}}" wx:for-item="memberList" data-giftid="{{memberList}}" style="height:80rpx;display:flex;align-items: center;">
+                        <image src="/images/head.png" style="width:28px;height:28px;border-radius: 50%;margin-right:10px" />
+                        <text>{{memberList.member||memberList.owner}}</text>
+                        <text style="color:rgb(0, 195, 255);margin-left:10px">
+                            {{memberList.owner&&'管理员'}}
+                        </text>
+                    </view>
+                </view>
+            </view>
+            <!-- 用户禁言 -->
+            <view class="weui-tab__panel" style="top:100rpx;padding:10px">
+                <view class="weui-tab__content" hidden="{{activeIndex != 2}}" style="top:100rpx;padding:10px">
+                    <text>web端暂未实现该接口（后期加上）</text>
+                </view>
             </view>
         </view>
     </view>

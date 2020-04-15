@@ -5,7 +5,7 @@ var WEBIM_FILESIZE_LIMIT = 10485760;
 var _tmpUtilXHR = false;
 var _hasFormData = typeof FormData !== "undefined";
 var _hasBlob = typeof Blob !== "undefined";
-var _isCanSetRequestHeader = _tmpUtilXHR.setRequestHeader || false;
+var _isCanSetRequestHeader = true;
 var _hasOverrideMimeType = _tmpUtilXHR.overrideMimeType || false;
 var _isCanUploadFileAsync = _isCanSetRequestHeader && _hasFormData;
 var _isCanUploadFile = _isCanUploadFileAsync || false;

@@ -104,7 +104,7 @@ Page({
   getLiveRooms(limit, cursor, callback){
     let self = this;
     wx.request({
-      url: 'https://a1-hsb.easemob.com/appserver/liverooms',
+      url: 'https://a1-hsb.easemob.com/appserver/liverooms/ongoing',
       data: {
         limit: limit,
         cursor: cursor
@@ -151,7 +151,7 @@ Page({
 
     function successFun(res){
       wx.navigateTo({
-        url: `/pages/live/live?id=${liveroom.id}&name=${liveroom.name}&owner=${liveroom.owner}&audience=${liveroom.showid}`,
+        url: `/pages/live/live?id=${liveroom.id}&name=${liveroom.name}&owner=${liveroom.owner}&audience=${liveroom.affiliations_count}`,
       })
     }
     function errorFun(e){

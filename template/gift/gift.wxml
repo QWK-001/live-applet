@@ -2,7 +2,7 @@
   <view class="giftModa">
     <view class="mask" bindtap='closeMask'></view>
     <!-- 观众送礼模块 -->
-    <view wx:if="{{status === 'fans'}}" style="width:100%;padding:20rpx;font-size:15px;color:rgba(255,255,255,.8)">
+    <view wx:if="{{identity !== 'compere'}}" style="width:100%;padding:20rpx;font-size:15px;color:rgba(255,255,255,.8)">
       <image src="/images/gift@2x.png" style="width:13px;height:13px;margin-right:10px" />
       <text class="giftModa-item">礼物</text>
       <view style="margin:5% 0">
