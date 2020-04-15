@@ -43,9 +43,24 @@
         <!-- 聊天 -->
         <view style="height:{{commentHeight}}px" class="comment">
           <view class="comment-list" wx:for="{{msgList}}">
-            <text class="name">{{item.nickName}}:</text>
-            <text style="color:#FFC700">{{item.msg}}</text>
+
+            <view wx:if="{{item.type == 'txt'}}">
+              <text class="name">{{item.nickName}}:</text>
+              <text style="color:#FFC700">{{item.msg}}</text>
+            </view>
+            
+            <view wx:if="{{item.type == 'custom' && item.customEvent == 'chatroom_gift'}}">
+              <text class="name">{{item.nickName}}:</text>
+              <text style="color:#3ea201">送给主播 {{item.params.num}} 个 {{giftModaData.giftData[item.params.id].name}}</text>
+            </view>
+
+            <view wx:if="{{item.type == 'custom' && item.customEvent == 'chatroom_praise'}}">
+              <text class="name">{{item.nickName}}:</text>
+              <text style="color:#497fe6">给主播点 {{item.params.num}} 个赞 👍</text>
+            </view>
+
           </view>
+
         </view>
         <!-- 发送弹幕 -->
         <view class="send">

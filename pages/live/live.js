@@ -14,56 +14,56 @@ Page({
       showGivesModa: false,//显隐送礼模块
       giftName: '',
       giftNumValue: '1', // 礼物数量
-      giftData: [
-        {
+      giftData: {
+        gift_1: {
           key: '1',
           value: 'gift_1',
           name: '香水玫瑰',
           url: '/images/Gift_01@2x.png'
         },
-        {
+        gift_2: {
           key: '2',
           value: '2',
           name: '心想事成',
           url: '/images/Gift_02@2x.png'
         },
-        {
+        gift_3: {
           key: '3',
           value: 'gift_3',
           name: '比翼双飞',
           url: '/images/Gift_03@2x.png'
         },
-        {
+        gift_4: {
           key: '4',
           value: 'gift_4',
           name: '生日蛋糕',
           url: '/images/Gift_04@2x.png'
         },
-        {
+        gift_5: {
           key: '5',
           value: 'gift_5',
           name: '大礼包',
           url: '/images/Gift_05@2x.png'
         },
-        {
+        gift_6: {
           key: '6',
           value: 'gift_6',
           name: '春花浪漫',
           url: '/images/Gift_06@2x.png'
         },
-        {
+        gift_7: {
           key: '7',
           value: 'gift_7',
           name: '小狗狗',
           url: '/images/Gift_07@2x.png'
         },
-        {
+        gift_8: {
           key: '8',
           value: 'gift_8',
           name: '金镯子',
           url: '/images/Gift_08@2x.png'
         }
-      ],
+      },
 
       showGiftId: 0,
     },
@@ -256,7 +256,7 @@ Page({
   },
 
   //发礼物消息
-  sendGiftMsg(gift) {
+  sendGiftMsg(giftNum) {
     let self = this;
     let roomId = this.data.roomId
     let from = this.data.myUserName
@@ -268,7 +268,7 @@ Page({
       roomType: true,
       customEvent: 'chatroom_gift',
       customExts: { note: self.data.giftModaData.giftName },
-      params: { id: 'gift_' + self.data.giftModaData.showGiftId, num: 1 },
+      params: { id: 'gift_' + self.data.giftModaData.showGiftId, num: giftNum },
       success: function () {
         console.log('send private text Success');
       },
@@ -404,6 +404,8 @@ Page({
   },
   // 当前选中的礼物
   inselected(e) {
+
+    console.log('222', 2)
     let id = e.currentTarget.dataset.giftid.key
     let showGiftId = 'giftModaData.showGiftId'
     let showGivesModa = 'giftModaData.showGivesModa'
@@ -418,7 +420,9 @@ Page({
     })
   },
   giftSubmit(e) {
-    this.sendGiftMsg()
+    console.log('giftSubmit', e)
+    let giftNum = e.detail.value.giftNum
+    this.sendGiftMsg(giftNum)
     this.setData({showGiftModa: false})
   },
 
