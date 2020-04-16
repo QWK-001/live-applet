@@ -13,7 +13,7 @@
       <view class="navbar">
         <view class="user-style" bindtap="showHostDetail">
           <image class="head-style" src="/images/live-logo.png" />
-          <text style="margin:0 10px">{{roomName}}</text>
+          <text style="margin:0 10px">{{owner}}</text>
         </view>
         <!-- 礼物榜单列表（暂时写死） -->
         <view class="user-right-style">
@@ -27,47 +27,41 @@
     </view>
     <view class="weui-tab__panel">
       <view class="weui-tab__content">
+        <!-- 聊天 -->
         <!-- 礼物提示 -->
-        <view class="promt">
+        <view class="promt" wx:if="{{showGiftHint}}" style="opacity: {{opacity}}">
           <view class="lw-style">
             <image class="head-style" src="/images/head.png" />
             <view style="font-size:10px">
-              <text style="display: block">名字最长8个汉字。</text>
+              <text style="display: block">{{nickName}}</text>
               <text style="opacity:0.6">送出礼物</text>
             </view>
-            <image class="lwImg" src="/images/lw1.png" />
-            <text style="font-size:15px">x1</text>
+            <image class="lwImg" src="{{giftModaData.url}}" />
+            <text style="font-size:15px">x{{giftNum}}</text>
           </view>
-          <!-- <text style="color:rgba(255, 255, 255, .5)">xxx进入了直播间。</text> -->
         </view>
-        <!-- 聊天 -->
-        <view style="height:{{commentHeight}}px" class="comment">
-          <view class="comment-list" wx:for="{{msgList}}">
-
+        <scroll-view scroll-y="true" style="height:{{commentHeight}}px;min-height:130px" scroll-into-view="{{toView}}" scroll-y='true'>
+          <view class="comment-list" wx:for="{{msgList}}" id='item{{item.id}}'>
             <view wx:if="{{item.type == 'txt'}}">
               <text class="name">{{item.nickName}}:</text>
               <text style="color:#FFC700">{{item.msg}}</text>
             </view>
-            
             <view wx:if="{{item.type == 'custom' && item.customEvent == 'chatroom_gift'}}">
               <text class="name">{{item.nickName}}:</text>
-              <text style="color:#3ea201">送给主播 {{item.params.num}} 个 {{giftModaData.giftData[item.params.id].name}}</text>
+              <text style="color:red">送给主播 {{item.params.num}} 个 {{giftModaData.giftData[item.params.id].name}}</text>
             </view>
-
             <view wx:if="{{item.type == 'custom' && item.customEvent == 'chatroom_praise'}}">
               <text class="name">{{item.nickName}}:</text>
-              <text style="color:#497fe6">给主播点 {{item.params.num}} 个赞 👍</text>
+              <text style="color:#497fe6">给主播点 {{item.params.num}} 个赞 </text>
             </view>
-
           </view>
-
-        </view>
+        </scroll-view>
         <!-- 发送弹幕 -->
         <view class="send">
           <image wx:if="{{!showInput}}" src="/images/ic_comments@2x.png" class="icon" bindtap="showInput"></image>
           <view style="position: fixed;right:0">
-            <image src="/images/ic_Chat@2x.png" class="icon foot-icon" bindtap="exitLiveRoom"></image>
-            <image wx:if="{{giftModaData.identity !== 'compere'}}" src="/images/ic_Share@2x.png" class="icon foot-icon" bindtap="giveLike"></image>
+            <image src="/images/ic_Chat@2x.png" class="icon foot-icon" bindtap="exitLiveRoom" style="background-color:rgba(105,16,16,.8);border-radius:50%"></image>
+            <image wx:if="{{giftModaData.identity !== 'compere'}}" src="/images/ic_Share@2x.png" class="icon foot-icon like-sty" bindtap="giveLike"></image>
             <image src="/images/ic_Gift@2x.png" class="icon foot-icon" bindtap="giftModa"></image>
           </view>
         </view>
@@ -92,12 +86,12 @@
   <view class="userInfo">
     <view class="left">
       <image src="/images/head.png" class="avatar"></image>
-       <view class="info">
-        <view class="username">{{roomName}}</view>
+      <view class="info">
+        <view class="username">{{owner}}</view>
         <view class="gift">
-          <text>礼物 <text class="num">0</text></text>
-          <text class="fans">粉丝 <text class="num">0</text></text>
-          <text class="fans">被赞 <text class="num">0</text></text>
+          <text>礼物<text class="num">0</text></text>
+          <text class="fans">粉丝<text class="num">0</text></text>
+          <text class="fans">被赞<text class="num">0</text></text>
         </view>
       </view>
     </view>

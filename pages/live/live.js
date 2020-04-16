@@ -7,13 +7,28 @@ Page({
     height: 0,
     hostShow: false, //主播详情弹窗
     showGiftModa: false, // 礼物弹窗
+    opacity:0,
+    showGiftHint: false,// 展示礼物特效
     isAttention: false, // 关注主播
     showMemberListModa: false, // 成员列表弹窗
+    msgList: [],
+    giftNum: '1',
+    toView:'', //消息框自动滚动
+    src: '/images/bgImg.jpg',
+    showInput: false,
+    isDanmu: false,
+
+    roomId: '',
+    nickName: '',
+    myUserName: '',
+    textMsg: '',
+    audience: 0,
     giftModaData: {  // 礼物模块数据（主播、粉丝）
       identity: '',//直播间身份（粉丝）
       showGivesModa: false,//显隐送礼模块
       giftName: '',
       giftNumValue: '1', // 礼物数量
+      giftUrl: '',
       giftData: {
         gift_1: {
           key: '1',
@@ -70,8 +85,8 @@ Page({
     memberListModa: {
       affiliations_count: '',// 观看成员人数
       list: [],// 成员列表模块数据
-      whiteList:[],// 白名单列表
-      switchChecked:false, //房间禁言
+      whiteList: [],// 白名单列表
+      switchChecked: false, //房间禁言
       tabs: ["观众", "白名单", "用户禁言"],
       type: '',
       activeIndex: 0,
@@ -89,17 +104,9 @@ Page({
         color: '#ff00ff',
         time: 3
       }],
-    msgList: [],
-    src: '/images/bgImg.jpg',
-    showInput: false,
-    isDanmu: false,
-
-    roomId: '',
-    nickName: '',
-    myUserName: '',
-    nickName: '',
-    textMsg: '',
-    audience: 0
+  },
+  onUnload: function () {
+    this.exitLiveRoom()
   },
   onLoad: function (option) {
     console.log('coption.query', option)
@@ -112,20 +119,19 @@ Page({
     self.setData({
       roomId: option.id,
       roomName: option.name,
+      owner: option.owner,
       myUserName: userInfo.userName,
       nickName: userInfo.nickName,
       audience: option.audience,
       [identity]: option.identity,
-      [type]: option.identity
+      [type]: option.identity,
     })
     wx.getSystemInfo({
       success: function (res) {
-        console.log('res>>>>', self.data);
-
         self.setData({
           sliderLeft: (res.windowWidth / self.data.memberListModa.tabs.length - sliderWidth) / 2,
           sliderOffset: res.windowWidth / self.data.memberListModa.tabs.length * self.data.memberListModa.activeIndex,
-          commentHeight: res.windowHeight - 550,
+          commentHeight: res.windowHeight - 500,
           height: res.windowHeight
         });
       }
@@ -148,7 +154,6 @@ Page({
     })
 
   },
-
 
   tabClick: function (e) {
     let self = this
@@ -249,10 +254,12 @@ Page({
     msg.body.nickName = self.data.nickName
     let msgList = self.data.msgList
     msgList.push(msg.body)
+    let lastMsg = msgList.slice(-1)
+    let toView = lastMsg[0]
     this.setData({
-      msgList: msgList
+      msgList: msgList,
+      toView:`item${toView.id}`
     })
-
   },
 
   //发礼物消息
@@ -283,8 +290,11 @@ Page({
     msg.body.nickName = self.data.nickName
     let msgList = self.data.msgList
     msgList.push(msg.body)
+    let lastMsg = msgList.slice(-1)
+    let toView = lastMsg[0]
     this.setData({
-      msgList: msgList
+      msgList: msgList,
+      toView:`item${toView.id}`
     })
   },
 
@@ -315,8 +325,11 @@ Page({
     msg.body.nickName = self.data.nickName
     let msgList = self.data.msgList
     msgList.push(msg.body)
+    let lastMsg = msgList.slice(-1)
+    let toView = lastMsg[0]
     this.setData({
-      msgList: msgList
+      msgList: msgList,
+      toView:`item${toView.id}`
     })
   },
 
@@ -353,10 +366,17 @@ Page({
   },
   // 退出直播间
   exitLiveRoom() {
-    console.log('退出');
-    let roomId = this.data.roomId
+    let obj = {
+      roomId: this.data.roomId,
+      identity: this.data.giftModaData.identity || '',
+      myUserName: this.data.myUserName
+    }
+    // 主播下播
+    if (obj.identity === 'compere') {
+      this.stopLive(obj)
+    }
     wx.WebIM.conn.quitChatRoom({
-      roomId: roomId,
+      roomId: obj.roomId,
       success: successFun,
       error: errorFun
     })
@@ -369,6 +389,23 @@ Page({
     function errorFun(e) {
       console.log('退出失败', e)
     }
+  },
+
+  stopLive(obj) {
+    wx.request({
+      url: `https://a1-hsb.easemob.com/appserver/liverooms/${obj.roomId}/users/${obj.myUserName}/offline`,
+      method: 'POST',
+      header: {
+        'content-type': 'application/json',
+        Authorization: 'Bearer ' + getApp().globalData.token
+      },
+      success(res) {
+        console.log('res>>>', res);
+      },
+      fail(e) {
+        console.log('err>>>', e);
+      }
+    })
   },
 
 
@@ -404,26 +441,39 @@ Page({
   },
   // 当前选中的礼物
   inselected(e) {
-
-    console.log('222', 2)
     let id = e.currentTarget.dataset.giftid.key
     let showGiftId = 'giftModaData.showGiftId'
     let showGivesModa = 'giftModaData.showGivesModa'
     let giftName = 'giftModaData.giftName'
-
-    console.log(id)
-    console.log(e.currentTarget.dataset.giftid.name)
+    let giftUrl = 'giftModaData.url'
     this.setData({
       [showGiftId]: id,
       [showGivesModa]: true,
-      [giftName]: e.currentTarget.dataset.giftid.name
+      [giftName]: e.currentTarget.dataset.giftid.name,
+      [giftUrl]: e.currentTarget.dataset.giftid.url
     })
   },
   giftSubmit(e) {
-    console.log('giftSubmit', e)
-    let giftNum = e.detail.value.giftNum
+    let giftNum = e.detail.value.giftNum || '1'
     this.sendGiftMsg(giftNum)
-    this.setData({showGiftModa: false})
+    this.setData({
+      showGiftModa: false,
+      giftNum: giftNum,
+      showGiftHint: true,
+    })
+
+    // 这样的实现简直拉垮，时间原因将就凑合吧
+    setTimeout(() => {
+      this.setData({
+        opacity:1
+      })
+    }, 100)
+    setTimeout(() => {
+      this.setData({
+        opacity:0,
+        showGiftHint:false
+      })
+    }, 2000)
   },
 
   //获取直播间成员详情
@@ -456,7 +506,7 @@ Page({
     function successFun(res) {
       let whiteList = 'memberListModa.whiteList'
       self.setData({
-        [whiteList]:res.entities
+        [whiteList]: res.entities
       })
     }
     function errorFun(e) {
@@ -465,11 +515,11 @@ Page({
   },
 
   // 房间禁言
-  changeSpeech(e){
-    e.detail.value?this.standSpeech():this.relieve()
+  changeSpeech(e) {
+    e.detail.value ? this.standSpeech() : this.relieve()
   },
   // 房间禁言
-  standSpeech(){
+  standSpeech() {
     let self = this
     let liveroomid = this.data.roomId
     wx.WebIM.conn.disableSendChatRoomMsg({
@@ -480,19 +530,19 @@ Page({
     function successFun(res) {
       let switchChecked = 'memberListModa.switchChecked'
       self.setData({
-        [switchChecked]:true
+        [switchChecked]: true
       })
     }
     function errorFun(e) {
       console.log('禁言失败>>', e)
       let switchChecked = 'memberListModa.switchChecked'
       self.setData({
-        [switchChecked]:false
+        [switchChecked]: false
       })
     }
   },
   // 房间解除禁言
-  relieve(){
+  relieve() {
     let self = this
     let liveroomid = this.data.roomId
     wx.WebIM.conn.enableSendChatRoomMsg({
@@ -503,7 +553,7 @@ Page({
     function successFun(res) {
       let switchChecked = 'memberListModa.switchChecked'
       self.setData({
-        [switchChecked]:false
+        [switchChecked]: false
       })
     }
     function errorFun(e) {

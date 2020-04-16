@@ -15,18 +15,18 @@
             </view>
         </view>
         <!-- 主播视角 -->
-        <view class="weui-tab" wx:else>
-            <view class="weui-navbar">
+        <view class="weui-tab-member" wx:else>
+            <view class="weui-navbar-member">
                 <block wx:for="{{tabs}}" wx:key="*this">
-                    <view id="{{index}}" class="weui-navbar__item {{activeIndex == index ? 'weui-bar__item_on' : ''}}" bindtap="tabClick">
-                        <view class="weui-navbar__title">{{item}}</view>
+                    <view id="{{index}}" class="weui-navbar__item-member {{activeIndex == index ? 'weui-bar__item_on-member' : ''}}" bindtap="tabClick">
+                        <view class="weui-navbar__title-member">{{item}}</view>
                     </view>
                 </block>
-                <view class="weui-navbar__slider" style="left: {{sliderLeft}}px; transform: translateX({{sliderOffset}}px); -webkit-transform: translateX({{sliderOffset}}px);"></view>
+                <view class="weui-navbar__slider-member" style="left: {{sliderLeft}}px; transform: translateX({{sliderOffset}}px); -webkit-transform: translateX({{sliderOffset}}px);"></view>
             </view>
             <!-- 观众 -->
-            <view class="weui-tab__panel">
-                <view class="weui-tab__content" hidden="{{activeIndex != 0}}" style="top:100rpx;padding:10px">
+            <view class="weui-tab__panel-member">
+                <view class="weui-tab__content-member" hidden="{{activeIndex != 0}}" style="top:100rpx;padding:10px">
                     <view style="float:right;padding-right:10px">
                         <text>房间禁言</text>
                         <switch bindchange='changeSpeech' checked="{{switchChecked}}"/>
@@ -40,7 +40,7 @@
             </view>
             <!-- 白名单 -->
             <view class="weui-tab__panel">
-                <view class="weui-tab__content" hidden="{{activeIndex != 1}}" style="top:100rpx;padding:10px">
+                <view class="weui-tab__content-member" hidden="{{activeIndex != 1}}" style="top:100rpx;padding:10px">
                     <view wx:for="{{whiteList}}" wx:for-item="memberList" data-giftid="{{memberList}}" style="height:80rpx;display:flex;align-items: center;">
                         <image src="/images/head.png" style="width:28px;height:28px;border-radius: 50%;margin-right:10px" />
                         <text>{{memberList.member||memberList.owner}}</text>
@@ -52,7 +52,7 @@
             </view>
             <!-- 用户禁言 -->
             <view class="weui-tab__panel" style="top:100rpx;padding:10px">
-                <view class="weui-tab__content" hidden="{{activeIndex != 2}}" style="top:100rpx;padding:10px">
+                <view class="weui-tab__content-member" hidden="{{activeIndex != 2}}" style="top:100rpx;padding:10px">
                     <text>web端暂未实现该接口（后期加上）</text>
                 </view>
             </view>

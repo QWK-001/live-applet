@@ -15,7 +15,7 @@
         <text class="gift-text">{{giftName}}</text>
         <form bindsubmit="giftSubmit">
           <view class="section">
-            <input class="input_input" name="giftNum" value="{{giftNumValue}}" focus="auto" placeholder="1" confirm-type="send" type="number" style="max-width: 50px;padding-left: 0;text-align: center;color: #000000;" />
+            <input class="input_input" name="giftNum" value="{{giftNumValue}}" maxlength="3" placeholder="1" confirm-type="send" type="number" style="max-width: 50px;padding-left: 0;text-align: center;color: #000000;" />
           </view>
           <view class="btn-area">
             <button formType="submit" plain style="width:180rpx;background:linear-gradient(325deg,rgba(90,93,208,1) 0%,rgba(4,174,240,1) 100%);border-radius:15px;color:#fff;font-size:13px">

@@ -35,6 +35,11 @@
   font-size : 28rpx;
   text-align: justify;
   max-width : 52%;
+
+  transition:.5s;
+  -moz-transition:.5s; /* Firefox 4 */
+  -webkit-transition:.5s; /* Safari and Chrome */
+  -o-transition:.5s; /* Opera */
 }
 
 .lw-style {
@@ -59,10 +64,6 @@
   margin-left  : 7px;
 }
 
-.comment {
-  overflow-y: auto;
-}
-
 .comment-list {
   width        : 100%;
   box-sizing   : border-box;
@@ -71,6 +72,13 @@
   font-size    : 28rpx;
   text-align   : left;
 }
+.like-sty:active{
+  position: relative;
+  top:3px;
+  background-color: rgba(0, 184, 240,.7);
+  border-radius: 50%;
+  transition: .2;
+}
 
 .name {
   color: #ffffff;
@@ -78,7 +86,7 @@
 
 .send {
   position   : fixed;
-  bottom     : 0;
+  bottom     : 16rpx;
   left       : 0;
   width      : 100%;
   height     : 100rpx;

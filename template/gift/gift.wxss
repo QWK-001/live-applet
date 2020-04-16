@@ -47,9 +47,7 @@
 }
 
 .gift-text {
-    position: relative;
-    bottom  : 15px;
-    right   : 10px;
+    margin-right: 10px;
 }
 
 .gift-record {
