@@ -138,19 +138,26 @@ Page({
     });
 
     //收到普通消息
-    disp.on('onTextMessage', function (message) {
+    disp.on('app.onTextMessage', function (message) {
       let nickName = USERS[parseInt(Math.random() * USERS.length)].nick
       message.nickName = nickName
       let msgList = self.data.msgList
       msgList.push(message)
-      this.setData({
+      self.setData({
         msgList: msgList
       })
+
     })
 
     //收到自定义消息 包括弹幕 礼物 点赞
-    disp.on('onCustomMessage', function (message) {
-
+    disp.on('app.onCustomMessage', function (message) {
+      let nickName = USERS[parseInt(Math.random() * USERS.length)].nick
+      message.nickName = nickName
+      let msgList = self.data.msgList
+      msgList.push(message)
+      self.setData({
+        msgList: msgList
+      })
     })
 
   },
@@ -260,6 +267,8 @@ Page({
       msgList: msgList,
       toView:`item${toView.id}`
     })
+
+    console.log('msgList', msgList)
   },
 
   //发礼物消息
