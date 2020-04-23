@@ -10,7 +10,7 @@ Page({
   onLoad() {
     let self = this;
     disp.on('app.loginSuccess', function(){
-      self.getLiveRooms(5, '', callback)
+      self.getLiveRooms(6, '', callback)
     })
     wx.getSystemInfo({
       success: function (res) {
@@ -76,7 +76,7 @@ Page({
   },
   onPullDownRefresh(){
     let self = this;
-    self.getLiveRooms(5, self.cursor, callback)
+    self.getLiveRooms(6, self.cursor, callback)
     function callback(res){
       if(!res.data.entities){
         wx.showToast({
@@ -129,18 +129,6 @@ Page({
   golive(e) {
     console.log('liveroom', e)
     let liveroom = e.currentTarget.dataset.liveroom
-    // {
-    //   affiliations_count: 3
-    //   cover: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1585649298994&di=4a23a41095ba858b3275b9a9312eea81&imgtype=0&src=http%3A%2F%2Fa4.att.hudong.com%2F21%2F09%2F01200000026352136359091694357.jpg"
-    //   created: 1585639782505
-    //   description: "快来嗨"
-    //   ext: {test: true}
-    //   id: "111402163437571"
-    //   name: "神仙姐姐"
-    //   owner: "fca64a28a115453cb902b11ace29baf5"
-    //   showid: 3
-    //   status: "offline"
-    // }
 
     //进入直播间
     wx.WebIM.conn.joinChatRoom({

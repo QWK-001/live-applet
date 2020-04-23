@@ -4,15 +4,3 @@
     <template is="activeCard" data="{{data: item.data}}"></template>
   </view>
 </view>
-
-
-<!-- <import src="../../template/card/card.wxml" />
-<view class="page">
-  <view 
-  	class="section"
-  	wx:for="{{liveroomsList}}"
-  	wx:key="id"
-  >
-    <template is="card" data="{{data: item.data}}"></template>
-  </view>
-</view> -->

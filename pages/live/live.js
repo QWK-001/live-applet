@@ -174,13 +174,6 @@ Page({
     switch (val) {
       case '1':
         self.getChatRoomWhitelist()
-        // function callback(res){
-        //   console.log('1111111');
-        //   let whiteList = 'memberListModa.whiteList'
-        //   this.setData({
-        //     [whiteList]:res.entities
-        //   })
-        // }
         break;
       case '2':
         break

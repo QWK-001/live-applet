@@ -1,7 +1,6 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/validate/validate",
     "pages/identity-validate/identity",
     "pages/attention/attention",
     "pages/usercenter/usercenter",

@@ -9,7 +9,7 @@ Page({
   },
   onLoad() {
     let self = this;
-    self.getLiveRooms(5, '', callback)
+    self.getLiveRooms(6, '', callback)
     let userName = wx.getStorageSync('userName')
     let userInfo = JSON.parse(userName)
     console.log('userInfo>>', userInfo);
@@ -38,7 +38,7 @@ Page({
 
   onPullDownRefresh() {
     let self = this;
-    self.getLiveRooms(5, self.cursor, callback)
+    self.getLiveRooms(6, self.cursor, callback)
     function callback(res) {
       if (!res.data.entities) {
         wx.showToast({
