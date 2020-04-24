@@ -46,11 +46,11 @@
               <text class="name">{{item.nickName}}:</text>
               <text style="color:#FFC700">{{item.msg || item.sourceMsg}}</text>
             </view>
-            <view wx:if="{{item.contentsType == 'CUSTOM' && item.customEvent == 'chatroom_gift'}}">
+            <view wx:if="{{(item.contentsType == 'CUSTOM' || item.type == 'custom')&& item.customEvent == 'chatroom_gift'}}">
               <text class="name">{{item.nickName}}:</text>
               <text style="color:red">送给主播 {{item.params.num}} 个 {{giftModaData.giftData[item.params.id].name}}</text>
             </view>
-            <view wx:if="{{item.contentsType == 'CUSTOM' && item.customEvent == 'chatroom_praise'}}">
+            <view wx:if="{{(item.contentsType == 'CUSTOM' || item.type == 'custom') && item.customEvent == 'chatroom_praise'}}">
               <text class="name">{{item.nickName}}:</text>
               <text style="color:#497fe6">给主播点 {{item.params.num}} 个赞 </text>
             </view>
