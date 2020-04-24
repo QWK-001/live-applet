@@ -144,9 +144,9 @@ Page({
       let msgList = self.data.msgList
       msgList.push(message)
       self.setData({
-        msgList: msgList
+        msgList: msgList,
+        toView:`item${message.id}`
       })
-
     })
 
     //收到自定义消息 包括弹幕 礼物 点赞
@@ -156,7 +156,8 @@ Page({
       let msgList = self.data.msgList
       msgList.push(message)
       self.setData({
-        msgList: msgList
+        msgList: msgList,
+        toView:`item${message.id}`
       })
     })
 
