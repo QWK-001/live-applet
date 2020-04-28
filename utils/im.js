@@ -1,4 +1,4 @@
-import IMsdk from "../sdk/webimSDK3.1.0";
+import IMsdk from "../sdk/webimSDK3.1.1";
 // import IMsdk from "../sdk/sdk/src/connection";
 IMsdk.config = {
 	/*
