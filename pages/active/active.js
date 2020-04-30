@@ -66,7 +66,7 @@ Page({
   getLiveRooms(limit, cursor, callback) {
     let self = this;
     wx.request({
-      url: 'https://a1-hsb.easemob.com/appserver/liverooms',
+      url: 'https://a1.easemob.com/appserver/liverooms',
       data: {
         limit: limit,
         cursor: cursor
@@ -90,7 +90,7 @@ Page({
     let myUserName = this.data.myUserName
     console.log('username>>>', myUserName, 'liveroom>>>', liveroom);
     wx.request({
-      url: `https://a1-hsb.easemob.com/appserver/liverooms/${liveroom.id}/users/${myUserName}/ongoing`,
+      url: `https://a1.easemob.com/appserver/liverooms/${liveroom.id}/users/${myUserName}/ongoing`,
       method: 'POST',
       header: {
         'content-type': 'application/json',

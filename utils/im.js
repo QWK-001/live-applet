@@ -4,14 +4,14 @@ IMsdk.config = {
 	/*
 	 * XMPP server
 	 */
-	xmppURL: "wss://im-api-new-hsb.easemob.com/websocket", //沙箱环境
+	xmppURL: "wss://im-api-wechat.easemob.com/websocket", //沙箱环境
 	// xmppURL: 'ws://39.107.156.84:5280/ws/',
 	/*
 	 * Backend REST API URL
 	 */
 	// apiURL: (location.protocol === 'https:' ? 'https:' : 'http:') + '//a1.easemob.com',
 	// ios must be https!!! by lwz
-	apiURL: "https://a1-hsb.easemob.com", //沙箱环境
+	apiURL: "https://a1.easemob.com", //沙箱环境
 	// apiURL: 'https://172.17.3.155:8080',
 	/*
 	 * Application AppKey 1102190314084694#supplymall

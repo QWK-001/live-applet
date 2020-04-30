@@ -39,7 +39,7 @@ Page({
 
     //创建直播间
     // wx.request({
-    //   url: 'https://a1-hsb.easemob.com/appserver/liverooms',
+    //   url: 'https://a1.easemob.com/appserver/liverooms',
     //   method: 'POST',
     //   data: {
     //     name: '沙箱环境聊天室',
@@ -104,7 +104,7 @@ Page({
   getLiveRooms(limit, cursor, callback){
     let self = this;
     wx.request({
-      url: 'https://a1-hsb.easemob.com/appserver/liverooms/ongoing',
+      url: 'https://a1.easemob.com/appserver/liverooms/ongoing',
       data: {
         limit: limit,
         cursor: cursor

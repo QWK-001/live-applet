@@ -396,7 +396,7 @@ Page({
 
   stopLive(obj) {
     wx.request({
-      url: `https://a1-hsb.easemob.com/appserver/liverooms/${obj.roomId}/users/${obj.myUserName}/offline`,
+      url: `https://a1.easemob.com/appserver/liverooms/${obj.roomId}/users/${obj.myUserName}/offline`,
       method: 'POST',
       header: {
         'content-type': 'application/json',
@@ -483,7 +483,7 @@ Page({
   getLiveRoomsMember(callback) {
     let liveroomid = this.data.roomId
     wx.request({
-      url: `https://a1-hsb.easemob.com/appserver/liverooms/${liveroomid}`,
+      url: `https://a1.easemob.com/appserver/liverooms/${liveroomid}`,
       header: {
         'content-type': 'application/json',
         Authorization: 'Bearer ' + getApp().globalData.token
